@@ -10,6 +10,7 @@ Staff can **view incoming orders** and **update their status** through a basic d
 ---
 
 ## 2) ERD
+```mermaid
 ---
 title: Restaurant app ERD
 ---
@@ -25,7 +26,6 @@ erDiagram
        int user_id FK
        date date_placed
        varchar(1) status
-       boolean is_take_away
     }
     MenuItem {
        int menu_item_id PK
@@ -42,7 +42,7 @@ erDiagram
     User ||--o{ Order : makes
     Order ||--|{ OrderItem : contains
     OrderItem ||--|| MenuItem : contains
-
+```````
 ---
 
 ## 3) User Stories

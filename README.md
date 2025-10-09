@@ -10,14 +10,38 @@ Staff can **view incoming orders** and **update their status** through a basic d
 ---
 
 ## 2) ERD
-![ERD](https://github.com/malekbadarin/Capstone-Project/blob/main/Restaurant%20app%20ERD.png?raw=true)
-
-**Relationships (high-level)**
-- MenuCategory **1..N** MenuItem  
-- Order **1..N** OrderItem
-- OrderItem **1..** MenuItem
-- User **0..N** Order (guest orders allowed)
-- User **0..N** CustomerProfile (users can be staff)
+---
+title: Restaurant app ERD
+---
+erDiagram
+    User {
+       int user_id PK
+       varchar(50) username
+       varchar(1) user_type
+       varchar(50) password
+    }
+    Order {
+       int order_id PK
+       int user_id FK
+       date date_placed
+       varchar(1) status
+       boolean is_take_away
+    }
+    MenuItem {
+       int menu_item_id PK
+       varchar(50) name
+       varchar(50) ingredients
+       boolean is_available
+       float price
+    }
+    OrderItem {
+       int order_item_id PK
+       int order_id FK
+       int quantity
+    }
+    User ||--o{ Order : makes
+    Order ||--|{ OrderItem : contains
+    OrderItem ||--|| MenuItem : contains
 
 ---
 
@@ -25,20 +49,19 @@ Staff can **view incoming orders** and **update their status** through a basic d
 
 ### Guest Customer
 - As a guest, I want to **browse the menu by category** so I can quickly see available dishes.
-- As a guest, I want to **add/remove items to a cart and change quantities** so I can build my order.
-- As a guest, I want to **checkout without creating an account** so I can order quickly.
-- As a guest, I want to **choose dine-in or pickup** during checkout so the restaurant prepares accordingly.
-- As a guest, I want to **see a clear confirmation with an order code** so I can reference my order at the counter.
+- As a guest, I want to **login or signup for an account**.
+- As a guest, I want to **view information about the restaurant**.
 
 ### Registered Customer
 - As a registered user, I want to **log in** so my basic details auto-fill at checkout.
 - As a registered user, I want my **profile (name/phone)** to be saved so checkout is faster next time.
-- *(No order history in MVP—future stretch.)*
+- As a registered user, I want to **add/remove items from my order and adjust quantities**.
+- - As a registered user, I want to **submit my order and get confirmation that my order was recieved**.
 
 ### Staff User
 - As a staff member, I want to **see a list of incoming orders** so I can prepare them efficiently.
 - As a staff member, I want to **view an order’s details** so I know what to prepare.
-- As a staff member, I want to **update order status** (received → preparing → ready → completed) so front-of-house knows what’s next.
+- As a staff member, I want to **update order status** (received → preparing → ready → completed).
 
 ### Manager/Admin
 - As a manager, I want to **manage menu items and categories** via Django Admin so I can keep the menu current.
@@ -50,8 +73,7 @@ Staff can **view incoming orders** and **update their status** through a basic d
 
 **Included**
 - Menu browsing (categories & items)
-- Session-based cart (no “saved carts”)
-- Guest & logged-in checkout (simple form: contact name, phone, order type)
+- Logged-in order submission (simple form: contact name, phone, order type)
 - Order creation (Order + OrderItems) with price snapshots
 - Staff dashboard (list, filter by status, update status)
 - Basic responsive styling
@@ -69,8 +91,8 @@ Staff can **view incoming orders** and **update their status** through a basic d
 ## 5) Routes (Proposed)
 - `/` — Home (CTA to Menu)
 - `/menu/` — Categories & items
-- `/cart/` — View/update cart
-- `/checkout/` — Checkout form (guest or logged-in)
+- `/cart/` — View/update cart (before submission)
+- `/submit/` — Submit form (logged-in)
 - `/orders/<code>/confirmation/` — Order confirmation page
 - `/staff/orders/` — Staff order list (auth required)
 - `/staff/orders/<id>/` — Staff order detail + status update (auth required)
@@ -78,9 +100,9 @@ Staff can **view incoming orders** and **update their status** through a basic d
 ---
 
 ## 6) Acceptance Criteria (MVP)
-- **Menu:** Only `is_active` items are visible; categories render in sort order.
+- **Menu:** Only `is_active` items are visible.
 - **Cart:** Add/remove and quantity updates work; subtotals recalc correctly.
-- **Checkout:** Creates `Order` + `OrderItem` records; stores `unit_price_snapshot`; generates short `order_code`.
+- **Submit:** Creates `Order` + `OrderItem` records; generates short `order_code`.
 - **Staff:** Orders appear on a dynamic view; status transitions are persisted and visible on order detail.
 - **Auth/Permissions:** Staff routes require authenticated staff user; customers can order as guest or logged-in user.
 - **UX:** Mobile-friendly layout; clear error/empty states; success flash messages.
@@ -90,8 +112,8 @@ Staff can **view incoming orders** and **update their status** through a basic d
 ## 7) Timeline (7 Days)
 
 **Day 1:** Project setup, base templates, models for Category/MenuItem, Django Admin, seed data.  
-**Day 2:** Menu list/detail, add-to-cart (session), cart page with quantity update & remove, subtotal calc.  
-**Day 3:** Checkout flow → create Order/OrderItems, confirmation with `order_code`.  
+**Day 2:** Menu list/detail, add-to-cart, cart page with quantity update & remove, subtotal calc.  
+**Day 3:** Submission flow → create Order/OrderItems, confirmation with `order_code`.  
 **Day 4:** Staff dashboard (list/detail), status transitions, basic auth/permissions.  
 **Day 5:** Styling & UX polish; tax/total computation; validation & messages.  
 **Day 6:** Tests (models/services), a couple of view tests; fixtures; README updates.  

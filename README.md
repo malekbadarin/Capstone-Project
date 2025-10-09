@@ -20,6 +20,8 @@ erDiagram
        varchar(50) username
        varchar(1) user_type
        varchar(50) password
+       varchar(50) email
+       int phone
     }
     Order {
        int order_id PK

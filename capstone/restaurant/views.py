@@ -4,10 +4,10 @@ from .models import Menu
 
 # Create your views here.
 def home(request):
-    return HttpResponse('Home')
+    return render(request, 'index.html')
 
 def about(request):
-    return HttpResponse('About')
+    return render(request, 'about.html')
 
 class menu(gen_views.ListView):
     model = Menu

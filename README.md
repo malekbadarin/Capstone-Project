@@ -38,6 +38,7 @@ erDiagram
     }
     OrderItem {
        int order_item_id PK
+       int menu_item_id FK
        int order_id FK
        int quantity
     }

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block main-header %}
+    <h1>Sign In</h1>
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'login' %}%}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="hidden" name="next" value="{% url 'home' %}">
+    <button type="submit">Login</button>
+</form>
+{% endblock %}

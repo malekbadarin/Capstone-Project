@@ -33,21 +33,16 @@ class Login(LoginView):
         return context
     
 def signup(request):
+    error_message = ''
     if request.method == 'POST':
-        # This is how to create a 'user' form object
-        # that includes the data from the browser
         form = UserCreationForm(request.POST)
-        #print("POST:", request.POST)                # pretty readable already
-        print("Keys:", request.POST.keys())         # what fields are there
-        print("Username:", request.POST.get('username'))
-        print("Raw dict:", request.POST.dict())
         if form.is_valid():
-            # This will add the user to the database
             user = form.save()
-            # This is how we log a user in
+            print("Created user:", user.pk, user.username)
             login(request, user)
             return redirect('home')
-    # A bad POST or a GET request, so render signup.html with an empty form
+        else:
+            error_message = 'Invalid sign up - try again'
     form = UserCreationForm()
-    context = {'form': form, 'paths': paths_list}
+    context = {'form': form, 'paths': paths_list, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)

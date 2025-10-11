@@ -1,7 +1,31 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+
 # Create your models here.
+class UserAddress(models.Model):
+    building = models.CharField(max_length = 25)
+    street = models.CharField(max_length = 25)
+    region = models.CharField(
+        "Region/Neighberhood",
+        max_length = 25,
+        )
+    city = models.CharField(max_length = 25)
+    phone = models.CharField(max_length = 25)
+    email = models.CharField(max_length=25, blank = True)
+    user = models.ForeignKey(
+        User,
+        on_delete = models.CASCADE,
+        )
+    
+    def __str__(self):
+        return f'{self.building} {self.street}, {self.region}, {self.city}'
+
+""" 
+    def add_address(self, phone, *email, buidling, street, city, country = 'JOR'):
+        new_address_key = len(self.addresses) + 1
+        self.addresses[new_address_key] = UserAddress(phone, *email, buidling, street, city, country = 'JOR') """
+
 class Menu(models.Model):
     name = models.CharField(max_length=50)
     desc = models.TextField(
@@ -25,12 +49,12 @@ class Menu(models.Model):
             ('NA', 'None'),
         )
     )
-    user = models.ForeignKey(
+    """ user = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
         verbose_name = "Owner (has full previliges to edit/delete item)",
         default = 1,
-        )
+        ) """
     
     def __str__(self):
         return f"{self.name} (JOD {self.unit_price})"
@@ -69,7 +93,8 @@ class Order(models.Model):
         validators = [MinValueValidator(1), MaxValueValidator(10)], #Fix number of tables to be able to set it dynamically later on
         )
     user = models.ForeignKey(User, on_delete = models.CASCADE)
-    
+    address = models.ForeignKey(UserAddress, on_delete = models.CASCADE)
+
     @property
     def total(self):
         return sum(item.menu_item.unit_price * item.quantity for item in self.orderitem_set.all())

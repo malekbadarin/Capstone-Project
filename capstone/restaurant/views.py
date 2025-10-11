@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Menu, Order
+from .models import Menu, Order, OrderItem
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
@@ -55,15 +55,43 @@ class Logout(LogoutView):
     next_page = '/'
 
 def order_menu(request):
+    menu = Menu.objects.all()
     try: #checks if there is an Open order for the user. If not, creates one
-        order = Order.objects.filter(user = request.user, status = 'O')[0]
+        order = Order.objects.get(user = request.user, status = 'O')
     except:
         order = Order(user = request.user)
         order.save()
-    return render(request, 'restaurant/order_menu.html', {'menu': Menu.objects.all(), 'order': order, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
+    for item in menu:
+        if item in order.orderitem_set.all():
+            item.quantity = order.orderitem_set.get(menu_item_id = item.id).quantity
+        else:
+            item.quantity = 0
+    return render(request, 'restaurant/order_menu.html', {'menu': menu, 'order': order, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
+
+def add_item(request, order_id, item_id):
+    try:
+        item = Order.objects.get(id = order_id).orderitem_set.get(menu_item_id = item_id) #Get the order > get OrderItem set > get item
+        item.quantity += 1
+    except:
+        item = OrderItem(order_id = order_id, menu_item_id = item_id)
+    item.save()
+    return redirect("order-menu")
+
+def remove_item(request, order_id, item_id):
+    print(f'order_id: {order_id}, item_id: {item_id}, {Order.objects.get(id = order_id).orderitem_set.get(menu_item_id = item_id)}')
+    try:
+        item = Order.objects.get(id = order_id).orderitem_set.get(menu_item_id = item_id) #Get the order > get OrderItem set > get item
+        if item.quantity > 1:
+            item.quantity -= 1
+            item.save()
+        else:
+            item.delete()
+    except:
+        pass
+    return redirect("order-menu")
 
 def orderreview(request, order_id):
-    order = Order.objects.filter(id = order_id)[0] #Select the first -and only- item in the query set
+    order = Order.objects.get(id = order_id)
     return render(request, 'restaurant/order_review.html', {'order': order, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list, 'order': order})
 
 def order_confirmation(request, order_id):

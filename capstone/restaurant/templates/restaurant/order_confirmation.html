@@ -3,30 +3,68 @@
 
 {% block title %}Order confirmed{% endblock %}
 
-{% block main-header %}
-    <h1>Order placed successfully!</h1>
-{% endblock %}
-
 {% block content %}
-    <p>Order no: {{ order.confirmation_number }} placed successfully</p>
-    <table>
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Quantity</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in order.orderitem_set.all %}
+    <main>
+        <div class='container heading'>
+            <h1>Thank you!</h1>
+            <h3>Your order has been confirmed.</h3>
+        </div>
+        <div class='container order-info'>
+            <div class='container delivery-info'>
+                <img src="{% static 'restaurant/images/delivery_info/'|add:order.order_type|add:'.png' %}" alt="{{order.get_order_type_display}}">
+                {% if order.order_type == 'I' %}
+                    <p>Your reservation for {{ order.party }} person(s), at {{ order.reservation_time }}. You will be seated at Table Number: {{order.table_no}}.</p>
+                {% elif order.order_type == 'P' %}
+                    <p>Your order will be ready for pickup in {{ order.processing_time }}.</p>
+                {% else %}
+                    <p>Our delivery team will contact you once the order is on its way!</p>
+                {% endif %}
+            </div>
+        </div>
+        {% if order.order_type == 'D' %}
+            <div class='container customer-info'>
+                <h4>Delivery location:</h4>
+                <p>{{ order.delivery_location }}</p>
+            </div>        
+        {% endif %}
+        <div class='container order-summary'>
+            <h4>Order Summary</h4>
+            <table class='container order-summary-list'>
+                {% for item in order.orderitem_set.all %}
+                    <tr class='order-summary-item'>
+                        <td class='summary-item-name'>{{ item.menu_item.name }}</td>
+                        <td class='summary-item-price'>{{ item.subtotal }}</td>
+                    </tr>
+                {% endfor %}
                 <tr>
-                    <td>{{ item.menu_item.name }}</td>
-                    <td>{{ item.quantity }}</td>
+                    <td class='summary-item-name'>Total</td>
+                    <td class='summary-item-price'>{{ order.total }}</td>
                 </tr>
-            {% endfor %}
-            <tr>
-                <td>Total</td>
-                <td>{{ order.total }}
-            </tr>
-        </tbody>
-    </table>
+            </table>
+        </div>
+        <div class='container'>
+            <p>Order confirmation # {{ order.confirmation_number }}</p>
+        </div>
+        {% comment %} <p>Order no: {{ order.confirmation_number }} placed successfully</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.orderitem_set.all %}
+                    <tr>
+                        <td>{{ item.menu_item.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td>Total</td>
+                    <td>{{ order.total }}
+                </tr>
+            </tbody>
+        </table> {% endcomment %}
+    </main>
 {% endblock %}

@@ -1,21 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 class Menu(models.Model):
     name = models.CharField(max_length=50)
     desc = models.TextField(
         "Item descritption",
-        max_length=250,
+        max_length = 250,
         null = True,
         )
     ingredients = models.TextField(
-        max_length=250,
+        max_length = 250,
         null = True,
         )
     is_available = models.BooleanField(default = True)
     unit_price = models.FloatField()
     portions = models.IntegerField(default = 1)
+    alergens = models.CharField(
+        default = 'NA',
+        choices = (
+            ('PE', 'Peanuts'),
+            ('WH', 'Wheat'),
+            ('SF', 'Shellfish'),
+            ('NA', 'None'),
+        )
+    )
     user = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
@@ -27,7 +36,7 @@ class Menu(models.Model):
         return f"{self.name} (JOD {self.unit_price})"
     
 class Order(models.Model):
-    date_placed = models.DateTimeField(null = True)
+    date_placed = models.DateTimeField(auto_now_add = True)
     status = models.CharField(
         default = 'O',
         max_length = 1,
@@ -38,6 +47,27 @@ class Order(models.Model):
             ('C', 'Closed'),
         )
     )
+    order_type = models.CharField(
+        default = 'I',
+        max_length = 1,
+        choices = [
+            ('P', 'Pickup'),
+            ('D', 'Delivery'),
+            ('I', 'Dine In'),
+        ]
+    )
+    party = models.IntegerField(
+        default = 1,
+        validators = [MinValueValidator(1)],
+        )
+    reservation_time = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        )
+    table_no = models.IntegerField(
+        default = 1,
+        validators = [MinValueValidator(1), MaxValueValidator(10)], #Fix number of tables to be able to set it dynamically later on
+        )
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     
     @property
@@ -64,6 +94,10 @@ class OrderItem(models.Model):
         default = 1,
         validators = [MinValueValidator(1)],
         )
+    
+    @property
+    def subtotal(self):
+        return self.menu_item.unit_price * self.quantity
     
     def __str__(self):
         return f'{self.quantity} x {self.menu_item.name} (JOD {self.menu_item.unit_price * self.quantity})'

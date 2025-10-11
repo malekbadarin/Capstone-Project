@@ -55,39 +55,79 @@ class Logout(LogoutView):
     next_page = '/'
 
 def order_menu(request):
-    menu = Menu.objects.all()
+    """ menu = Menu.objects.all()
+    order = {'id':-1}
     try: #checks if there is an Open order for the user. If not, creates one
         order = Order.objects.get(user = request.user, status = 'O')
     except:
-        order = Order(user = request.user)
-        order.save()
+        pass
     for item in menu:
-        if item in order.orderitem_set.all():
-            item.quantity = order.orderitem_set.get(menu_item_id = item.id).quantity
-        else:
+        try:
+            item.quantity = item.orderitem_set.get(order_id = order.id).quantity
+        except:
+            item.quantity = 0"""
+    menu = Menu.objects.all()
+    order = Order.objects.filter(user = request.user, status = 'O').first()
+    for item in menu:
+        try:
+            item.quantity = item.orderitem_set.get(order_id = order.id).quantity
+        except:
             item.quantity = 0
     return render(request, 'restaurant/order_menu.html', {'menu': menu, 'order': order, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
 
-def add_item(request, order_id, item_id):
-    try:
+def add_item(request, item_id):
+    """ try:
         item = Order.objects.get(id = order_id).orderitem_set.get(menu_item_id = item_id) #Get the order > get OrderItem set > get item
         item.quantity += 1
     except:
-        item = OrderItem(order_id = order_id, menu_item_id = item_id)
+        try:
+            item = OrderItem(order_id = order_id, menu_item_id = item_id)
+        except:
+            order = Order(user = request.user)
+            order.save()
+            item = OrderItem(order_id = order_id, menu_item_id = item_id)
+    item.save() """
+    order = Order.objects.filter(user = request.user, status = 'O').first()
+    if order:
+        try:
+            item = Order.objects.get(id = order.id).orderitem_set.get(menu_item_id = item_id) #Get the order > get OrderItem set > get item
+            item.quantity += 1
+        except:
+            item = OrderItem(order_id = order.id, menu_item_id = item_id)
+    else:
+        order = Order(user = request.user)
+        order.save()
+        item = OrderItem(order_id = order.id, menu_item_id = item_id)
     item.save()
     return redirect("order-menu")
 
-def remove_item(request, order_id, item_id):
-    print(f'order_id: {order_id}, item_id: {item_id}, {Order.objects.get(id = order_id).orderitem_set.get(menu_item_id = item_id)}')
-    try:
+def remove_item(request, item_id):
+    """ try:
         item = Order.objects.get(id = order_id).orderitem_set.get(menu_item_id = item_id) #Get the order > get OrderItem set > get item
         if item.quantity > 1:
             item.quantity -= 1
             item.save()
         else:
             item.delete()
+            current_order = Order.objects.get(id = order_id)
+            if current_order.total == 0: #Deletes empty orders
+                current_order.delete()
     except:
-        pass
+        pass """
+    order = Order.objects.filter(user = request.user, status = 'O').first()
+    if order:
+        try:
+            item = Order.objects.get(id = order.id).orderitem_set.get(menu_item_id = item_id) #Get the order > get OrderItem set > get item
+            if item.quantity > 1:
+                item.quantity -= 1
+                item.save()
+            else:
+                item.delete()
+                current_order = Order.objects.get(id = order.id)
+                if current_order.total == 0: #Deletes empty orders
+                    current_order.delete()
+        except:
+            pass
     return redirect("order-menu")
 
 def orderreview(request, order_id):

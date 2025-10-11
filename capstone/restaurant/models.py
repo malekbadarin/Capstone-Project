@@ -46,7 +46,7 @@ class Order(models.Model):
     
     @property
     def confirmation_number(self):
-        return f'{self.user.id}-{self.id}-{self.date_placed.strftime("%Y%m%d")}'
+        return f'{self.user.id}-{self.id}-{self.date_placed.strftime("%Y%m%d%H%M%S")}'
 
     def __str__(self):
         return f'Order {self.confirmation_number} - {self.get_status_display()} (JOD {self.total})'

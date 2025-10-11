@@ -26,13 +26,19 @@
                         <p>Price: JOD {{ item.unit_price }}</p>
                     </td>
                     <td>
-                        <a href="{% url 'remove-item' order.id item.id %}"><p>-</p>
+                        <a href="{% url 'remove-item' item.id %}"><p>-</p>
                         <input type="number" id="quantity" name="quantity" min=0 value={{ item.quantity|default:0 }}>
-                        <a href="{% url 'add-item' order.id item.id %}"><p>+</p></a>
+                        <a href="{% url 'add-item' item.id %}"><p>+</p></a>
                     </td>
                 </tr>
             {% endfor %}
+            <tr>
+                <td colspan="3">
+                    <p>total:</p>
+                </td>
+                <td><p>{{ order.total|default:0 }}</p></td>
+            </tr>
         </tbody>
     </table>
-    <a href="{% url 'order-review' order.id %}"><p>Review and place order</p></a>
+    <a href="{% url 'order-review' order.id|default:0 %}"><p>Review and place order</p></a>
 {% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Review order{% endblock %}
+
+{% block main-header %}
+    <h1>Review and place your order</h1>
+{% endblock %}
+
+{% block content %}
+    <h2>Order summary</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.orderitem_set.all %}
+                <tr>
+                    <td>{{ item.menu_item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>Total</td>
+                <td>{{ order.total }}
+            </tr>
+        </tbody>
+    </table>
+    <p>Place order</p>
+    <a href={% url 'menu' %}><p>Back to menu</p></a>
+{% endblock %}

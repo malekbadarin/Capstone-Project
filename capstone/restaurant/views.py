@@ -1,7 +1,7 @@
-#import django.views.generic as gen_views
+import django.views.generic as gen_views
 from urllib import request
 from django.shortcuts import render, redirect
-from .models import Menu
+from .models import Menu, Order
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
@@ -46,3 +46,10 @@ def signup(request):
     form = UserCreationForm()
     context = {'form': form, 'paths': paths_list, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
+
+def orderreview(request, order_id):
+    order = Order.objects.filter(id = order_id)[0] #Select the first -and only- item in the query set
+    return render(request, 'restaurant/order_review.html', {'paths': paths_list, 'order': order})
+
+class OrderConfirmation(gen_views.DetailView):
+    pass

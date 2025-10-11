@@ -1,12 +1,32 @@
-{% extends "base.html" %}
+{% extends "restaurant/base.html" %}
 {% load static %}
 
-{% block title %}Welcome to Restaurant{% endblock %}
-
-{% block main-header %}
-    <h1>Welcome to the Restaurant</h1>
-{% endblock %}
+{% block title %}Welcome to Restaurant Name{% endblock %}
 
 {% block content %}
-    <p>Enjoy!</p>
+    <main class='container'>
+        <div class='container' id='index-hero-desc'>
+            <h1>Crafted Flavour.<br>Modern Convenience.</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sapien erat, mollis et tempor vitae, commodo gravida mauris. Donec massa neque, malesuada a condimentum eu.</p>
+            <p class='button'><a href="{% url 'about' %}">Our story</a></p>
+        </div>
+        <div class='container' id='index-hero-img-container'>
+            <img class='rotate-45 card-transition' id='index-hero-img' src="{% static 'restaurant/images/hero.png' %}">
+            <h2 class='label'>Lorem ipsum dolor<h2>
+        </div>
+        <div class='container button' id='view-menu'>
+            <div class='container button'>
+                <a href="{% url 'order-menu' %}">
+                    <img class='index-img' id='view-menu-img' src="{% static 'restaurant/images/view_menu_button.png' %}" alt="View Menu">
+                    <p class="button-label">VIEW MENU</p>
+                </a>
+            </div>
+            <div class='container button'>
+                <a href="{% url 'login' %}">
+                    <img class='index-img' id='login-img' src="{% static 'restaurant/images/login_button.png' %}" alt="Start Order">
+                    <p class="button-label">START ORDER</p>
+                </a>
+            </div>
+        </div>
+    </main>
 {% endblock %}

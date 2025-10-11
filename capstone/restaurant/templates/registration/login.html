@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "restaurant/base.html" %}
 {% load static %}
 
 {% block title %}Sign In{% endblock %}
@@ -8,10 +8,10 @@
 {% endblock %}
 
 {% block content %}
-<form action="{% url 'login' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="hidden" name="next" value="{% url 'home' %}">
-    <button type="submit">Login</button>
-</form>
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="next" value="{% url 'order-menu' %}">
+        <button type="submit">Login</button>
+    </form>
 {% endblock %}

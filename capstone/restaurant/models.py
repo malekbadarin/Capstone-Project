@@ -27,7 +27,7 @@ class Menu(models.Model):
         return f"{self.name} (JOD {self.unit_price})"
     
 class Order(models.Model):
-    date_placed = models.DateTimeField(auto_now_add = True)
+    date_placed = models.DateTimeField(null = True)
     status = models.CharField(
         default = 'O',
         max_length = 1,

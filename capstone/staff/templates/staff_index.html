@@ -1,0 +1,18 @@
+{% extends "restaurant/base.html" %}
+{% load static %}
+
+{% block title %}Staff portal{% endblock %}
+
+{% block main-header %}
+    <h1>Weolcome to the staff portal</h1>
+{% endblock %}
+
+{% block content %}
+    <p>Please log in to proceed!</p>
+    <form action="{% url 'staff-login' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="next" value="{% url 'active-orders' %}">
+        <button type="submit">Login</button>
+    </form>
+{% endblock %}

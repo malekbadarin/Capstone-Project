@@ -1,0 +1,20 @@
+{% extends "restaurant/base.html" %}
+{% load static %}
+
+{% block title %}Completed orders{% endblock %}
+
+{% block main-header %}
+    <h1>List of past and completed orders</h1>
+{% endblock %}
+
+{% block content %}
+    {% for order in orders %}
+        <div>
+            <h3>Order no.: {{ order.confirmation_number }}</h3>
+            {% for item in order.orderitem_set.all %}
+                <p><strong>{{ item.menu_item.name }}</strong></p>
+                <p><em>{{ item.quantity }}</em></p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock %}

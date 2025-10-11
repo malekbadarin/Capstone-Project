@@ -3,10 +3,30 @@
 
 {% block title %}Order confirmed{% endblock %}
 
-{% block header %}
+{% block main-header %}
     <h1>Order placed successfully!</h1>
 {% endblock %}
 
 {% block content %}
-    
+    <p>Order no: {{ order.confirmation_number }} placed successfully</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.orderitem_set.all %}
+                <tr>
+                    <td>{{ item.menu_item.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>Total</td>
+                <td>{{ order.total }}
+            </tr>
+        </tbody>
+    </table>
 {% endblock %}

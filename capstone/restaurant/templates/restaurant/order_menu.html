@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Menu{% endblock %}
+
+{% block main-header %}
+    <h1>Menu</h1>
+{% endblock %}
+
+{% block content %}
+    <h2>Add items to your order!</h2>
+    <table>
+        <tbody>
+            {% for item in menu %}
+                <tr class="menu-item">
+                    <td>
+                        <img src="{% static 'restaurant/images/'|add:item.name|add:'.png' %}" alt="{{ item.name }}">
+                    </td>
+                    <td>
+                        <h2>{{ item.name }}</h2>
+                        <p><strong>{{ item.desc }}</strong></p>
+                        <p><em>{{item.ingredients}}</em></p>
+                        <p>Portion suggestion: {{item.portions}} people</p>
+                    </td>
+                    <td>
+                        <p>Price: JOD {{ item.unti_price }}</p>
+                    </td>
+                    <td>
+                        <p>-</p>
+                        <input type="number" id="quantity" name="quantity" min=0 value=0>
+                        <p>+</p>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'order-review' order.id %}"><p>Review and place order</p></a>
+{% endblock %}

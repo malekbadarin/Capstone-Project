@@ -13,15 +13,39 @@
         <header>
             {% block main-header %}
             {% endblock %}
+            <p>Welcome,
+                {% if user.is_authenticated %}
+                    {{ user.username.capitalize }}
+                {% else %}
+                    Guest
+                {% endif %}
+                !</p>
             <nav>
                 <ul>
-                    {% for path in paths %}
-                        {% if path != request.resolver_match.view_name %}
-                            <li><a href="{% url path %}">{{path}}</a></li>
-                        {% else %}
-                            <li>{{path}}</li>
-                        {% endif %}
-                    {% endfor %}
+                    {% if user.is_authenticated %}
+                        {% for path in auth_paths %}
+                            {% if path != request.resolver_match.view_name %}
+                                <li><a href="{% url path %}">{{path}}</a></li>
+                            {% else %}
+                                <li>{{path}}</li>
+                            {% endif %}
+                        {% endfor %}
+                        <li>
+                            <form method="post" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button type="submit">Log out</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        {% for path in guest_paths %}
+                            {% if path != request.resolver_match.view_name %}
+                                <li><a href="{% url path %}">{{path}}</a></li>
+                            {% else %}
+                                <li>{{path}}</li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    
                 </ul>
             </nav>
             </header>

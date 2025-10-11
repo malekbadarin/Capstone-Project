@@ -29,6 +29,6 @@
             </tr>
         </tbody>
     </table>
-    <p>Place order</p>
+    <a href = "{% url 'order-confirmation' order.id %}"><p>Place order</p>
     <a href={% url 'menu' %}><p>Back to menu</p></a>
 {% endblock %}

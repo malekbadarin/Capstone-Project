@@ -6,7 +6,6 @@
         <div class='container heading'>
             <h1>Review Order</h1>
         </div>
-        {% for item in order.orderitem_set.all %}
             <div class='container breadcrumbs'>
                 <ul class='container breadcrumbs-list'>
                     <li class='breadcrumbs-item inactive'><a href="{% url 'order-menu' %}">Menu</a></li>
@@ -14,57 +13,116 @@
                     <li class='breadcrumbs-item inactive'>Confirmation</li>
                 </ul>
             </div>
-            <div class='container review-card'>
-                <img class='review-card-img' src="{% static 'restaurant/images/delivery_info/'|add:order.order_type|add:'.png' %}" alt="{{ item.menu_item.name }}">
-                <div class='container review-card-text'>
-                    <h3 class='review-card-name'>{{ item.menu_item.name }}</h3>
-                    <p class='review-card-desc'>{{ item.menu_item.desc }}</p>
+            <form class='container review' action="{% url 'order-confirmation' order.id %}" mehtod='post'>
+                {% csrf_token %}
+                {% for item in order.orderitem_set.all %}
+                    <div class='container review-card'>
+                        <img class='review-card-img' src="{% static 'restaurant/images/delivery_info/'|add:order.order_type|add:'.png' %}" alt="{{ item.menu_item.name }}">
+                        <div class='container review-card-text'>
+                            <h3 class='review-card-name'>{{ item.menu_item.name }}</h3>
+                            <p class='review-card-desc'>{{ item.menu_item.desc }}</p>
+                            {% if item.menu_item.allergen != 'NA' %}   
+                                <img class='allergen-icon' src="{% static 'restaurant/images/allergens/'|add:item.menu_item.allergen|add:'.png' %}" alt="{{ item.menu_item.get_allergen_display }}">
+                            {% endif %}
+                        </div>
+                        <h3 class='review-card-subtotal'>{{ item.subtotal }}</h3>
+                        <div class='review-card-quantity'>
+                            {% if item.subtotal > 0 %}
+                                <p class='button'>-</p>
+                                <input type="number" class='quantity' name="quantity" min=0 value={{ item.quantity|default:0 }}>
+                                <p class='button'>+</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class='container total'>
+                    <h3>Total:</h3>
+                    <h3>{{ order.total }}</h3>
                 </div>
-                <h3 class='review-card-subtotal'>{{ item.subtotal }}</h3>
-                <div class='review-card-quantity'>
-                    {% if item.subtotal > 0 %}
-                        <p class='button'><a href="{% url 'remove-item' item.id %}">-</a></p>
-                        <input type="number" class='quantity' name="quantity" min=0 value={{ item.quantity|default:0 }}>
-                        <p class='button'><a href="{% url 'add-item' item.id %}">+</a></p>
+                <div class='container review-delivery-options'>
+                    {% if order.order_type == 'I' %}
+                        <label for="reservation-datetime">Reservation date and time:</label>
+                        <input type="datetime-local" id="reservation-datetime" name="reservation-datetime">
+                        <label for="reservation-table">Select your table:</label>
+                        <select id="table" name="table">
+                            {% for table in tables %}
+                                <option value="table">Table {{ table }}</option>
+                            {% endfor %}
+                        </select>
+                    {% elif order.order_type == 'P' %}
+                        <label for="pickup-time">Pick-up time:</label>
+                        <input type="time" id="pickup-time" name="pickup-time">
+                    {% else %}
+                        <input type="" class='input-choice' id="address" name="address" default="{{ user.address }}">
                     {% endif %}
                 </div>
-            </div>
-        {% endfor %}
-        <div class='container total'>
-                <h3>Total:</h3>
-                <h3>{{ order.total }}</h3>
-        </div>
-        <div class='container review-delivery-options'>
-            {% if order.order_type == 'I' %}
-
-            {% elif order.order_type == 'P' %}
-
-            {% else %}
-                <input type="" class='input-choice' id="address" name="address" default="{{ user.address }}">
-            {% endif %}
-        </div>
-        {% comment %} 
-        <table>
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in order.orderitem_set.all %}
-                    <tr>
-                        <td>{{ item.menu_item.name }}</td>
-                        <td>{{ item.quantity }}</td>
-                    </tr>
+            </from>
+            {% comment %}
+                older iteration without a proper form
+                <div class='container review-card'>
+                    <img class='review-card-img' src="{% static 'restaurant/images/delivery_info/'|add:order.order_type|add:'.png' %}" alt="{{ item.menu_item.name }}">
+                    <div class='container review-card-text'>
+                        <h3 class='review-card-name'>{{ item.menu_item.name }}</h3>
+                        <p class='review-card-desc'>{{ item.menu_item.desc }}</p>
+                        {% if item.menu_item.allergen != 'NA' %}   
+                            <img class='allergen-icon' src="{% static 'restaurant/images/allergens/'|add:item.menu_item.allergen|add:'.png' %}" alt="{{ item.menu_item.get_allergen_display }}">
+                        {% endif %}
+                    </div>
+                    <h3 class='review-card-subtotal'>{{ item.subtotal }}</h3>
+                    <div class='review-card-quantity'>
+                        {% if item.subtotal > 0 %}
+                            <p class='button'>-</p>
+                            <input type="number" class='quantity' name="quantity" min=0 value={{ item.quantity|default:0 }}>
+                            <p class='button'>+</p>
+                        {% endif %}
+                    </div>
+                </div>
                 {% endfor %}
-                <tr>
-                    <td>Total</td>
-                    <td>{{ order.total }}
-                </tr>
-            </tbody>
-        </table> {% endcomment %}
-        <a href = "{% url 'order-confirmation' order.id %}"><p>Place order</p>
-        <a href={% url 'order-menu' %}><p>Back to menu</p></a>
+                <div class='container total'>
+                        <h3>Total:</h3>
+                        <h3>{{ order.total }}</h3>
+                </div>
+                <div class='container review-delivery-options'>
+                    {% if order.order_type == 'I' %}
+                        <label for="reservation-datetime">Reservation date and time:</label>
+                        <input type="datetime-local" id="reservation-datetime" name="reservation-datetime">
+                        <label for="reservation-table">Select your table:</label>
+                        <select id="table" name="table">
+                            {% for table in tables %}
+                                <option value="table">Table {{ table }}</option>
+                            {% endfor %}
+                        </select>
+                    {% elif order.order_type == 'P' %}
+                        <label for="pickup-time">Pick-up time:</label>
+                        <input type="time" id="pickup-time" name="pickup-time">
+                    {% else %}
+                        <input type="" class='input-choice' id="address" name="address" default="{{ user.address }}">
+                    {% endif %}
+                </div> {% endcomment %}
+                {% comment %}
+                even older iteration with a table (proof of concept)
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order.orderitem_set.all %}
+                            <tr>
+                                <td>{{ item.menu_item.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td>Total</td>
+                            <td>{{ order.total }}
+                        </tr>
+                    </tbody>
+                </table>
+            {% endcomment %}
+        <button type="submit" class='button submit'>Place order</button>
+        <p><a class='button' href={% url 'order-menu' %}>Back to menu</a></p>
     </main>
 {% endblock %}

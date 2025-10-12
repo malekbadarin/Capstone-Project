@@ -1,18 +1,35 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from datetime import datetime
 
 # Create your models here.
 class UserAddress(models.Model):
-    building = models.CharField(max_length = 25)
-    street = models.CharField(max_length = 25)
-    region = models.CharField(
-        "Region/Neighberhood",
+    building = models.CharField(
+        blank = True,
         max_length = 25,
         )
-    city = models.CharField(max_length = 25)
-    phone = models.CharField(max_length = 25)
-    email = models.CharField(max_length=25, blank = True)
+    street = models.CharField(
+        blank = True,
+        max_length = 25,
+        )
+    region = models.CharField(
+        "Region/Neighberhood",
+        blank = True, 
+        max_length = 25,
+        )
+    city = models.CharField(
+        default = 'Amman',
+        max_length = 25,
+        )
+    phone = models.CharField(
+        default = '07',
+        max_length = 25,
+        )
+    email = models.CharField(
+        blank = True,
+        max_length=25,
+        )
     user = models.ForeignKey(
         User,
         on_delete = models.CASCADE,
@@ -38,13 +55,17 @@ class Menu(models.Model):
         null = True,
         )
     is_available = models.BooleanField(default = True)
-    unit_price = models.FloatField()
+    unit_price = models.FloatField(
+        default = 1.0,
+        validators = [MinValueValidator(1)],
+    )
     portions = models.IntegerField(default = 1)
-    alergens = models.CharField(
+    allergen = models.CharField(
         default = 'NA',
         choices = (
             ('PE', 'Peanuts'),
             ('WH', 'Wheat'),
+            ('DA', 'Dairy'),
             ('SF', 'Shellfish'),
             ('NA', 'None'),
         )
@@ -84,16 +105,18 @@ class Order(models.Model):
         default = 1,
         validators = [MinValueValidator(1)],
         )
-    reservation_time = models.DateTimeField(
-        auto_now=False,
-        auto_now_add=False,
-        )
+    reservation_time = models.DateTimeField(default = datetime.now())
     table_no = models.IntegerField(
         default = 1,
         validators = [MinValueValidator(1), MaxValueValidator(10)], #Fix number of tables to be able to set it dynamically later on
         )
-    user = models.ForeignKey(User, on_delete = models.CASCADE)
-    address = models.ForeignKey(UserAddress, on_delete = models.CASCADE)
+    user = models.ForeignKey(
+        User,
+        on_delete = models.CASCADE,
+        )
+    address = models.CharField(
+        blank = True,
+        )
 
     @property
     def total(self):
@@ -125,4 +148,4 @@ class OrderItem(models.Model):
         return self.menu_item.unit_price * self.quantity
     
     def __str__(self):
-        return f'{self.quantity} x {self.menu_item.name} (JOD {self.menu_item.unit_price * self.quantity})'
+        return f'{self.quantity} x {self.menu_item.name} (JOD {self.menu_item.unit_price * self.quantity}) --- (Order info: {self.order})'

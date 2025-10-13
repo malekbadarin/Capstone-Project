@@ -14,6 +14,12 @@
             <div class='container review-button'>
                 <button type="submit" class='button'>Review order</button>
             </div>
+            <label for="order-type">Select your order type:</label>
+                    <select id="order-type" name="order-type">
+                        <option value="I">Dine In</option>
+                        <option value="P">Pickup</option>
+                        <option value="D">Delivery</option>
+                    </select>
             <div class='container menu'>
                 {% for item in menu %}
                     {% if item.is_available %}
@@ -27,7 +33,6 @@
                             <p class='dish-ingredients'><em>{{ item.ingredients }}</em></p>
                             <div class="container add-remove-quantity">
                                 <p class='button'>-</p>
-                                <input type="hidden" name="{{ item.html_name }}"  value="0">
                                 <input type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min="0" value="{{ item.quantity|default:"0" }}">
                                 <p class='button'>+</p>
                             </div>

@@ -98,10 +98,19 @@ class Order(models.Model):
             item.save()
             return 'Quantity updated'
         return 'Quantity unchanged'
+    
+    def update_type(self, new_type):
+        self.order_type = new_type
+        self.save()
+        return 'Type updated'
 
     @property
     def total(self):
         return sum(item.menu_item.unit_price * item.quantity for item in self.orderitem_set.all())
+    
+    @property
+    def pickup_time(self):
+        return self.reservation_time.time()
     
     @property
     def confirmation_number(self):

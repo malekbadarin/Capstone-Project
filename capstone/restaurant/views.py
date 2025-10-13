@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
-from .models import Menu, Order, OrderItem, UserAddress
+from .models import Menu, Order
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import datetime
+from django.utils import timezone
 
 # Create your views here.
 guest_paths_list = [
@@ -61,17 +63,22 @@ class Logout(LoginRequiredMixin, LogoutView):
 def menu_helper_function(request):
     menu = Menu.objects.all().order_by('id')
     order = Order.objects.filter(user = request.user, status = 'O').first()
+    if not order:
+        order_type = 'I'
+    else:
+        order_type = order.order_type
     for item in menu:
         try:
             item.quantity = item.orderitem_set.filter(order_id = order.id).first().quantity
         except:
             item.quantity = 0
-    return menu
+    return menu, order_type
 
 @login_required
 def order_menu(request):
-    menu = menu_helper_function(request)
-    return render(request, 'restaurant/order_menu.html', {'menu': menu, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
+    menu, order_type = menu_helper_function(request)
+    #print(f'----------{order_type}--------------')
+    return render(request, 'restaurant/order_menu.html', {'menu': menu, 'order': order_type, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
 
 """
 Old order creation and update logic. Did not rely on forms. Most likely less secure.
@@ -135,14 +142,19 @@ def order_review(request):
             if key in menu_item_names:
                 menu_item_id = Menu.objects.filter(name = key).first().id
                 if key in order_item_names:
-                    valid_order = True
                     old_quantity = order.orderitem_set.get(menu_item__name = key).quantity
                     #print(f'---item_id {menu_item_id} old quantity {old_quantity} new quantity {int(value)}---')
                     if int(value) != old_quantity:
                         order.update_item(menu_item_id, int(value))
                     continue
-                order.add_item(menu_item_id, int(value))
-                valid_order = True
+                else:
+                    order.add_item(menu_item_id, int(value))
+            try:
+                if key == 'order-type':
+                    order.update_type(value)
+                    #print(f'order-type: {value}')
+            except:
+                print(f'Order probably does not exist. order_type {value} not saved')
         if not order.total:
             order.delete()
             return redirect('order-menu')
@@ -170,31 +182,47 @@ def order_confirmation(request, order_id):
         menu_item_names = [item.name for item in Menu.objects.all()]
         for key, value in response.items():
             key = key.replace("___", " ") #convert the name of the input tag back into an item name
-            print(f'-----------------{key}-----------------')
+            #print(f'-----------------{key}-----------------')
             if key in menu_item_names:
                 menu_item_id = Menu.objects.filter(name = key).first().id
                 order.update_item(menu_item_id, int(value))
             elif key == 'table':
-                print(f'table: {value}')
+                #print(f'table: {value}')
                 try:
-                    order.table_no = int(response[key])
+                    order.table_no = int(value)
+                    #TODO: add logic to check table availability and remove unavailable tables (will require a Table model)
                 except:
-                    pass #Lazy solution, but obscure if exception is raised. TODO: Fix esception handling for better maintainability.
-                         #Also TODO: add logic to check table availability and remove unavailable tables (will require a Table model)
+                    print(f'Order probably does not exist. table_no {value} not saved')
             elif key == "party":
-                print(f'party: {value}')
+                #print(f'party: {value}')
                 try:
-                    order.party = int(response[key])
+                    order.party = int(value)
+                    #TODO: add logic to check persons vs table availability (will probably require changes to the table selection UI and logic)
                 except:
-                    pass #Lazy solution, but obscure if exception is raised. TODO: Fix esception handling for better maintainability.
-                         #Also TODO: add logic to check persons vs table availability (will probably require changes to the table selection UI and logic)
+                    print(f'Order probably does not exist. party {value} not saved')
+            elif key == "reservation-datetime":
+                print(f'reservation-datetime: {value}')
+                try:
+                    reservation_time_object = timezone.make_aware(datetime.strptime(value, '%Y-%m-%dT%H:%M')) #Convert the input into a datetime object (which django expects for a DateTimeField, and then make it aware of its timezone to avoid conflicts)
+                    order.reservation_time = reservation_time_object
+                    #TODO: add logic to constrain available reservation time both on frontend (for workhours/workdays), and backend (for ensuring no conflict in reservations)
+                except:
+                    print(f'Order probably does not exist. reservation-datetime {value} not saved')
+            elif key == "pickup-time":
+                print(f'pickup-time: {value}')
+                try:
+                    reservation_time_object = timezone.make_aware(datetime.combine(datetime.today(), datetime.strptime(value, '%H:%M').time())) #Similar to above, but first combine the time input with today's date
+                    order.reservation_time = reservation_time_object
+                    #TODO: add logic to constrain available reservation time both on frontend (disable on off days)
+                except:
+                    print(f'Order probably does not exist. pickup-time {value} not saved')
         order.status = 'P'
         order.save()
         if not order.total:
             order.delete()
             return redirect('order-menu')
-    else:
-        print('------------GET-------------')
+    #else:
+    #    print('------------GET-------------')
     return render(request, 'restaurant/order_confirmation.html', {'order': order, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
 
 @login_required

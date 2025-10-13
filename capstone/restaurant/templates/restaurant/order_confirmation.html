@@ -15,7 +15,7 @@
                 {% if order.order_type == 'I' %}
                     <p>Your reservation for {{ order.party }} person(s), at {{ order.reservation_time }}. You will be seated at Table Number: {{order.table_no}}.</p>
                 {% elif order.order_type == 'P' %}
-                    <p>Your order will be ready for pickup in {{ order.processing_time }}.</p>
+                    <p>Your order will be ready for pickup at {{ order.pickup_time }}.</p>
                 {% else %}
                     <p>Our delivery team will contact you once the order is on its way!</p>
                 {% endif %}

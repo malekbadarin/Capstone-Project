@@ -32,9 +32,9 @@
                             {% endif %}
                             <p class='dish-ingredients'><em>{{ item.ingredients }}</em></p>
                             <div class="container add-remove-quantity">
-                                <p class='button'>-</p>
-                                <input type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min="0" value="{{ item.quantity|default:"0" }}">
-                                <p class='button'>+</p>
+                                <p class='button sub-button'>-</p>
+                                <input class='qty-input' type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min="0" value="{{ item.quantity|default:"0" }}">
+                                <p class='button add-button'>+</p>
                             </div>
                         </div>
                     {% endif %}

@@ -1,0 +1,58 @@
+#hero-section {
+    margin: 30px 30px 0 30px;
+}
+
+#hero-section > * {
+    max-width: 50%;
+}
+
+#gallery-img-container {
+    position: relative;
+    justify-content: flex-end;
+    transform: rotate(7deg);
+    margin: 0 2.5%;
+}
+
+#buttons-section {
+    margin: 50px 30px 0 30px;
+    height: 20%;
+}
+
+.button {
+    width: 48%;
+}
+
+.transparent-img-label {
+    position: absolute;
+    bottom: 5%;
+    left: 0;
+    background: #00000080;
+    color: #e6e6e6;
+}
+
+.button-img {
+    position: relative;
+    padding: 0 25%;
+    justify-content: center;
+    background-color: #e6e6e6;
+}
+
+#buttons-section a{
+    width: 45%;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+    background-color: #e6e6e6;
+}
+
+.button-img .transparent-img-label{
+    bottom: 30%;
+    left: 0;
+}
+
+.button-img-sub{
+    position: relative;
+    background-color: #e6e6e6;
+}

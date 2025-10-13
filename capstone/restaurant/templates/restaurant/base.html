@@ -5,24 +5,24 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Restaurant{% endblock %}</title>
-        <link rel="icon" href="{% static 'restaurant/images/icon.png' %}">
-        {% block stylesheet %}
+        <link rel="icon" href="{% static 'restaurant/images/logo.png' %}">
         <link rel="stylesheet" href="{% static 'restaurant/css/base.css' %}">
+        {% block stylesheet %}
         {% endblock %}
     </head>
     <body>
-        <a href="{% url 'home' %}"><img class='logo' src="{% static 'restaurant/images/logo.png' %}" alt="logo"></a>
-        <header>
+        <header class='container-flex'>
+            <a href="{% url 'home' %}"><img class='image button' id='logo' src="{% static 'restaurant/images/logo.png' %}" alt="logo"></a>
             {% block main-header %}
             {% endblock %}
-            <nav>
+            <nav class='container-flex'>
                 {% if user.is_authenticated %}
-                    <ul class='nav-list'>
+                    <ul class='container-flex nav-list'>
                         {% for path in auth_paths %}
                             {% if path != request.resolver_match.view_name %}
                                 <li class='nav-item'><a href="{% url path %}">{{path}}</a></li>
                             {% else %}
-                                <li>{{path}}</li>
+                                <li class='nav-item'>{{path}}</li>
                             {% endif %}
                         {% endfor %}
                         <li class='nav-item'>
@@ -33,7 +33,7 @@
                         </li>
                     </ul>
                 {% else %}
-                    <ul class='nav-list'>
+                    <ul class='container-flex nav-list'>
                         {% for path in guest_paths %}
                             {% if path != request.resolver_match.view_name %}
                                 <li class='nav-item'><a href="{% url path %}">{{path}}</a></li>
@@ -45,19 +45,24 @@
                 {% endif %}
             </nav>                
         </header>
-        <main>
-            {% block content %}
-            {% endblock %}
-        </main>
+        {% block content %}
+        {% endblock %}
         <footer>
-            <div class='container'>
-                <p class='footer-blob'></p>
-                <p class='footer-blob'><a href='#'>Privacy Policy / Terms of Use</a></p>
-                <p class='button'><a href="https://maps.google.com/maps/dir//%D8%B4%D8%A7%D9%88%D8%B1%D9%85%D8%A7+%D8%A3%D8%A8%D9%88+%D8%AD%D8%A7%D8%AA%D9%85+Abu+Hatem+Shawerma+Karamah+St+Amman+Jordan%E2%80%AD/@32.050994,35.8783848,14z/data=!4m5!4m4!1m0!1m2!1m1!1s0x151c9e5a362daa79:0xa62d9102ddf9ea90">Directions</a></p>
+            <div class='container-flex'>
+                <div class='container-flex' id='footer-blob'>
+                    <p class='smaller'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla pretium, tellus sed feugiat placerat, elit.</p>
+                </div>
+                <div class='container-flex' id='footer-privacy'>
+                    <p><a href='#'>Privacy Policy / Terms of Use</a></p>
+                </div>
+                <div class='container-flex' id='footer-directions'>
+                    <p class='button'><a href="https://maps.google.com/maps/dir//%D8%B4%D8%A7%D9%88%D8%B1%D9%85%D8%A7+%D8%A3%D8%A8%D9%88+%D8%AD%D8%A7%D8%AA%D9%85+Abu+Hatem+Shawerma+Karamah+St+Amman+Jordan%E2%80%AD/@32.050994,35.8783848,14z/data=!4m5!4m4!1m0!1m2!1m1!1s0x151c9e5a362daa79:0xa62d9102ddf9ea90">Directions</a></p>
+                </div>
             </div>
-            <div class='container'>
-                <p class='footer-blob'>Copyright: <a href="https://github.com/malekbadarin">Malek Badarin 2025<span class='superscript]'>©</span></a></p>
+            <div class='container' id='copyright'>
+                <p><a href="https://github.com/malekbadarin">Malek Badarin 2025<span class='superscript]'>©</span></a></p>
             </div>
         </footer>
     </body>
+    <script src={% static 'restaurant/js/base.js' %}></script>
 </html>

@@ -27,9 +27,9 @@
                         </div>
                         <h3 class='review-card-subtotal'>{{ item.subtotal }}</h3>
                         <div class='review-card-quantity'>
-                            <p class='button'>-</p>
-                            <input type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min=0 value="{{ item.quantity }}"> 
-                            <p class='button'>+</p>
+                            <p class='sub-button button'>-</p>
+                            <input class='qty-input' type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min=0 value="{{ item.quantity }}"> 
+                            <p class='add-button button'>+</p>
                         </div>
                     </div>
                 {% endfor %}
@@ -48,11 +48,11 @@
                                 <option value="{{ table }}">Table {{ table }}</option>
                             {% endfor %}
                         </select>
-                        <p class='button'>-</p>
+                        <p class='sub-button button'>-</p>
                         <label for="party">Party:</label>
-                        <input type="number" id='party' name="party" min="1" max="20" value="1">
+                        <input class='qty-input' type="number" id='party' name="party" min="1" max="20" value="1">
                         <span> person(s).</span>
-                        <p class='button'>+</p>
+                        <p class='add-button button'>+</p>
                     {% elif order.order_type == 'P' %}
                         <label for="pickup-time">Pick-up time:</label>
                         <input type="time" id="pickup-time" name="pickup-time" value="00:00">

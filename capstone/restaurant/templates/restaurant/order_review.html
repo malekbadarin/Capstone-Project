@@ -13,7 +13,7 @@
                     <li class='breadcrumbs-item inactive'>Confirmation</li>
                 </ul>
             </div>
-            <form class='container review' action="{% url 'order-confirmation' order.id %}" mehtod='post'>
+            <form class='container review' action="{% url 'order-confirmation' order.id %}" method='post'>
                 {% csrf_token %}
                 {% for item in order.orderitem_set.all %}
                     <div class='container review-card'>
@@ -27,7 +27,9 @@
                         </div>
                         <h3 class='review-card-subtotal'>{{ item.subtotal }}</h3>
                         <div class='review-card-quantity'>
-                            <input type="number" class='quantity' name="quantity" min=0 value={{ item.quantity }}> 
+                            <p class='button'>-</p>
+                            <input type="hidden" name="{{ item.html_name }}"  value="0">
+                            <input type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min=0 value="{{ item.quantity }}"> 
                             <p class='button'>+</p>
                         </div>
                     </div>
@@ -43,7 +45,7 @@
                         <label for="reservation-table">Select your table:</label>
                         <select id="table" name="table">
                             {% for table in tables %}
-                                <option value="table">Table {{ table }}</option>
+                                <option value="{{ table }}">Table {{ table }}</option>
                             {% endfor %}
                         </select>
                         <p class='button'>-</p>
@@ -58,7 +60,9 @@
                         <input type="" class='input-choice' id="address" name="address" default="{{ user.address }}">
                     {% endif %}
                 </div>
-            </from>
+                <button type="submit" class='button submit'>Place order</button>
+                <p><a class='button' href={% url 'order-menu' %}>Back to menu</a></p>
+            </form>
             {% comment %}
                 older iteration without a proper form
                 <div class='container review-card'>
@@ -124,7 +128,5 @@
                     </tbody>
                 </table>
             {% endcomment %}
-        <button type="submit" class='button submit'>Place order</button>
-        <p><a class='button' href={% url 'order-menu' %}>Back to menu</a></p>
     </main>
 {% endblock %}

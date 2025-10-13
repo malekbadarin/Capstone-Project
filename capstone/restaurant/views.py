@@ -22,17 +22,6 @@ auth_paths_list = [
     'staff',
 ]
 
-def menu_helper_function(request):
-    menu = Menu.objects.all().order_by('id')
-    order = Order.objects.filter(user = request.user, status = 'O').first()
-    for item in menu:
-        item.html_id = item.name.replace(" ", "")
-        try:
-            item.quantity = item.orderitem_set.filter(order_id = order.id).first().quantity
-        except:
-            item.quantity = 0
-    return menu
-
 def home(request):
     return render(request, 'index.html', {'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
 
@@ -69,8 +58,7 @@ def signup(request):
 class Logout(LoginRequiredMixin, LogoutView):
     next_page = '/'
 
-@login_required
-def order_menu(request):
+def menu_helper_function(request):
     menu = Menu.objects.all().order_by('id')
     order = Order.objects.filter(user = request.user, status = 'O').first()
     for item in menu:
@@ -78,6 +66,11 @@ def order_menu(request):
             item.quantity = item.orderitem_set.filter(order_id = order.id).first().quantity
         except:
             item.quantity = 0
+    return menu
+
+@login_required
+def order_menu(request):
+    menu = menu_helper_function(request)
     return render(request, 'restaurant/order_menu.html', {'menu': menu, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
 
 """
@@ -137,18 +130,20 @@ def order_review(request):
             order.save()
         order_item_names = [item.menu_item.name for item in order.orderitem_set.all()]
         for key, value in response.items():
-            if key in menu_item_names and int(value) > 0:
+            key = key.replace("___", " ") #convert the name of the input tag back into an item name
+            #print(f'-----------------{key}-----------------')
+            if key in menu_item_names:
                 menu_item_id = Menu.objects.filter(name = key).first().id
                 if key in order_item_names:
                     valid_order = True
                     old_quantity = order.orderitem_set.get(menu_item__name = key).quantity
-                    print(f'---item_id {menu_item_id} old quantity {old_quantity} new quantity {int(value)}---')
+                    #print(f'---item_id {menu_item_id} old quantity {old_quantity} new quantity {int(value)}---')
                     if int(value) != old_quantity:
                         order.update_item(menu_item_id, int(value))
                     continue
                 order.add_item(menu_item_id, int(value))
                 valid_order = True
-        if not valid_order:
+        if not order.total:
             order.delete()
             return redirect('order-menu')
         else:
@@ -174,13 +169,15 @@ def order_confirmation(request, order_id):
         response = request.POST
         menu_item_names = [item.name for item in Menu.objects.all()]
         for key, value in response.items():
-            if key in menu_item_names and int(value) > 0:
+            key = key.replace("___", " ") #convert the name of the input tag back into an item name
+            print(f'-----------------{key}-----------------')
+            if key in menu_item_names:
                 menu_item_id = Menu.objects.filter(name = key).first().id
                 order.update_item(menu_item_id, int(value))
             elif key == 'table':
                 print(f'table: {value}')
                 try:
-                    order.table = int(response[key])
+                    order.table_no = int(response[key])
                 except:
                     pass #Lazy solution, but obscure if exception is raised. TODO: Fix esception handling for better maintainability.
                          #Also TODO: add logic to check table availability and remove unavailable tables (will require a Table model)
@@ -196,7 +193,8 @@ def order_confirmation(request, order_id):
         if not order.total:
             order.delete()
             return redirect('order-menu')
-    
+    else:
+        print('------------GET-------------')
     return render(request, 'restaurant/order_confirmation.html', {'order': order, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
 
 @login_required

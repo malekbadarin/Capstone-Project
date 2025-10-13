@@ -11,6 +11,9 @@
         </div>
         <form class='container form' action="{% url 'order-review' %}" method='post'>
             {% csrf_token %}
+            <div class='container review-button'>
+                <button type="submit" class='button'>Review order</button>
+            </div>
             <div class='container menu'>
                 {% for item in menu %}
                     {% if item.is_available %}
@@ -24,8 +27,8 @@
                             <p class='dish-ingredients'><em>{{ item.ingredients }}</em></p>
                             <div class="container add-remove-quantity">
                                 <p class='button'>-</p>
-                                <input type="hidden" name="{{ item.name }}" value="0"> {% comment %} Force form to submit 0 if the quantity of the acutal input is 0 {% endcomment %}
-                                <input type="number" id="{{ item.name }}" name="{{ item.name }}" min="0" value="{{ item.quantity }}">
+                                <input type="hidden" name="{{ item.html_name }}"  value="0">
+                                <input type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min="0" value="{{ item.quantity|default:"0" }}">
                                 <p class='button'>+</p>
                             </div>
                         </div>

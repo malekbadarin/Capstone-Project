@@ -30,6 +30,10 @@ class Menu(models.Model):
             ('NA', 'None'),
         )
     )
+
+    @property
+    def html_name(self):
+        return self.name.replace(" ", "___")
     
     def __str__(self):
         return f"{self.name} (JOD {self.unit_price})"
@@ -76,23 +80,24 @@ class Order(models.Model):
         )
 
     def add_item(self, item_id, quantity):
-        new_item = OrderItem(order = self, menu_item_id = item_id, quantity = quantity)
-        new_item.save()
-        return 'Item created'
+        if quantity == 0:
+            return 'Zero quantity item'
+        else:
+            new_item = OrderItem(order = self, menu_item_id = item_id, quantity = quantity)
+            new_item.save()
+            return 'Item created'
     
     def update_item(self, item_id, quantity):
         item = self.orderitem_set.get(menu_item_id = item_id)
-        print(f'Entered update function, item_id {item_id}, old quantity {item.quantity}, new quantity {quantity}')
+        #print(f'Entered update function, item_id {item_id}, old quantity {item.quantity}, new quantity {quantity}')
         if quantity == 0:
             item.delete()
-            print('Item deleted')
-            return
+            return 'Item deleted'
         elif item.quantity != quantity:
             item.quantity = quantity
             item.save()
-            print('Quantity updated')
-            return
-        print('Quantity unchanged')
+            return 'Quantity updated'
+        return 'Quantity unchanged'
 
     @property
     def total(self):
@@ -116,12 +121,15 @@ class OrderItem(models.Model):
         )
     quantity = models.IntegerField(
         default = 1,
-        validators = [MinValueValidator(1)],
         )
     
     @property
     def subtotal(self):
         return self.menu_item.unit_price * self.quantity
+    
+    @property
+    def html_name(self):
+        return self.menu_item.name.replace(" ", "___")
     
     def __str__(self):
         return f'{self.quantity} x {self.menu_item.name} (JOD {self.menu_item.unit_price * self.quantity}) --- (Order info: {self.order})'

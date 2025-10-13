@@ -1,48 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
-from datetime import datetime
 
 # Create your models here.
-class UserAddress(models.Model):
-    building = models.CharField(
-        blank = True,
-        max_length = 25,
-        )
-    street = models.CharField(
-        blank = True,
-        max_length = 25,
-        )
-    region = models.CharField(
-        "Region/Neighberhood",
-        blank = True, 
-        max_length = 25,
-        )
-    city = models.CharField(
-        default = 'Amman',
-        max_length = 25,
-        )
-    phone = models.CharField(
-        default = '07',
-        max_length = 25,
-        )
-    email = models.CharField(
-        blank = True,
-        max_length=25,
-        )
-    user = models.ForeignKey(
-        User,
-        on_delete = models.CASCADE,
-        )
-    
-    def __str__(self):
-        return f'{self.building} {self.street}, {self.region}, {self.city}'
-
-""" 
-    def add_address(self, phone, *email, buidling, street, city, country = 'JOR'):
-        new_address_key = len(self.addresses) + 1
-        self.addresses[new_address_key] = UserAddress(phone, *email, buidling, street, city, country = 'JOR') """
-
 class Menu(models.Model):
     name = models.CharField(max_length=50)
     desc = models.TextField(
@@ -70,12 +30,6 @@ class Menu(models.Model):
             ('NA', 'None'),
         )
     )
-    """ user = models.ForeignKey(
-        User,
-        on_delete = models.CASCADE,
-        verbose_name = "Owner (has full previliges to edit/delete item)",
-        default = 1,
-        ) """
     
     def __str__(self):
         return f"{self.name} (JOD {self.unit_price})"
@@ -105,10 +59,13 @@ class Order(models.Model):
         default = 1,
         validators = [MinValueValidator(1)],
         )
-    reservation_time = models.DateTimeField(default = datetime.now())
+    reservation_time = models.DateTimeField(
+        blank = True,
+        null =True,
+        )
     table_no = models.IntegerField(
         default = 1,
-        validators = [MinValueValidator(1), MaxValueValidator(10)], #Fix number of tables to be able to set it dynamically later on
+        validators = [MinValueValidator(1), MaxValueValidator(10)], #TODO: Fix number of tables to be able to set it dynamically later on
         )
     user = models.ForeignKey(
         User,
@@ -117,6 +74,25 @@ class Order(models.Model):
     address = models.CharField(
         blank = True,
         )
+
+    def add_item(self, item_id, quantity):
+        new_item = OrderItem(order = self, menu_item_id = item_id, quantity = quantity)
+        new_item.save()
+        return 'Item created'
+    
+    def update_item(self, item_id, quantity):
+        item = self.orderitem_set.get(menu_item_id = item_id)
+        print(f'Entered update function, item_id {item_id}, old quantity {item.quantity}, new quantity {quantity}')
+        if quantity == 0:
+            item.delete()
+            print('Item deleted')
+            return
+        elif item.quantity != quantity:
+            item.quantity = quantity
+            item.save()
+            print('Quantity updated')
+            return
+        print('Quantity unchanged')
 
     @property
     def total(self):
@@ -149,3 +125,37 @@ class OrderItem(models.Model):
     
     def __str__(self):
         return f'{self.quantity} x {self.menu_item.name} (JOD {self.menu_item.unit_price * self.quantity}) --- (Order info: {self.order})'
+    
+class UserAddress(models.Model):
+    building = models.CharField(
+            blank = True,
+            max_length = 25,
+            )
+    street = models.CharField(
+            blank = True,
+            max_length = 25,
+            )
+    region = models.CharField(
+            "Region/Neighberhood",
+            blank = True, 
+            max_length = 25,
+            )
+    city = models.CharField(
+            default = 'Amman',
+            max_length = 25,
+            )
+    phone = models.CharField(
+            default = '07',
+            max_length = 25,
+            )
+    email = models.CharField(
+            blank = True,
+            max_length=25,
+            )
+    user = models.ForeignKey(
+            User,
+            on_delete = models.CASCADE,
+            )
+        
+    def __str__(self):
+        return f'{self.building} {self.street}, {self.region}, {self.city}'

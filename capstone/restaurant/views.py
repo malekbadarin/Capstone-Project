@@ -5,8 +5,6 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from datetime import datetime
-from django import forms
 
 # Create your views here.
 guest_paths_list = [
@@ -23,6 +21,17 @@ auth_paths_list = [
     'order-menu',
     'staff',
 ]
+
+def menu_helper_function(request):
+    menu = Menu.objects.all().order_by('id')
+    order = Order.objects.filter(user = request.user, status = 'O').first()
+    for item in menu:
+        item.html_id = item.name.replace(" ", "")
+        try:
+            item.quantity = item.orderitem_set.filter(order_id = order.id).first().quantity
+        except:
+            item.quantity = 0
+    return menu
 
 def home(request):
     return render(request, 'index.html', {'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
@@ -66,10 +75,10 @@ def order_menu(request):
     order = Order.objects.filter(user = request.user, status = 'O').first()
     for item in menu:
         try:
-            item.quantity = item.orderitem_set.get(order_id = order.id).quantity
+            item.quantity = item.orderitem_set.filter(order_id = order.id).first().quantity
         except:
             item.quantity = 0
-    return render(request, 'restaurant/order_menu.html', {'menu': menu, 'order': order, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
+    return render(request, 'restaurant/order_menu.html', {'menu': menu, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
 
 """
 Old order creation and update logic. Did not rely on forms. Most likely less secure.
@@ -117,27 +126,33 @@ def orderreview(request, order_id):
     return render(request, 'restaurant/order_review.html', {'order': order, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})"""
 
 @login_required
-def orderreview(request):
+def order_review(request):
     if request.method == 'POST':
-        response = request.POST.copy()
-        del response['csrfmiddlewaretoken']
+        response = request.POST
         valid_order = False
-        new_order = Order(user = request.user)
-        new_order.save()
+        menu_item_names = [item.name for item in Menu.objects.all()]
+        order = Order.objects.filter(user = request.user, status = 'O').first() #tries to find an open order for the user if no open order is found, creates a new order
+        if not order:
+            order = Order(user = request.user)
+            order.save()
+        order_item_names = [item.menu_item.name for item in order.orderitem_set.all()]
         for key, value in response.items():
-            menu_item = Menu.objects.filter(id = int(key)).first()
-            if int(value) > 0:
+            if key in menu_item_names and int(value) > 0:
+                menu_item_id = Menu.objects.filter(name = key).first().id
+                if key in order_item_names:
+                    valid_order = True
+                    old_quantity = order.orderitem_set.get(menu_item__name = key).quantity
+                    print(f'---item_id {menu_item_id} old quantity {old_quantity} new quantity {int(value)}---')
+                    if int(value) != old_quantity:
+                        order.update_item(menu_item_id, int(value))
+                    continue
+                order.add_item(menu_item_id, int(value))
                 valid_order = True
-                try:
-                    new_order_item = OrderItem(order = new_order, menu_item = menu_item, quantity = int(value))
-                    new_order_item.save()
-                    print(new_order_item)
-                except:
-                    pass
         if not valid_order:
-            new_order.delete()
+            order.delete()
+            return redirect('order-menu')
         else:
-            return render(request, 'restaurant/order_review.html', {'order': new_order, 'tables': [table for table in range(1,11)]})
+            return render(request, 'restaurant/order_review.html', {'order': order, 'tables': [table for table in range(1,11)]})
     else:
         return redirect('order-menu')
 
@@ -151,6 +166,38 @@ def order_confirmation(request, order_id):
         order.date_placed = datetime.now()
         order.save()
     return render(request, 'restaurant/order_confirmation.html', {'order': order, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list}) """
+
+@login_required
+def order_confirmation(request, order_id):
+    order = Order.objects.filter(id = order_id, user = request.user).first()
+    if request.method == 'POST':
+        response = request.POST
+        menu_item_names = [item.name for item in Menu.objects.all()]
+        for key, value in response.items():
+            if key in menu_item_names and int(value) > 0:
+                menu_item_id = Menu.objects.filter(name = key).first().id
+                order.update_item(menu_item_id, int(value))
+            elif key == 'table':
+                print(f'table: {value}')
+                try:
+                    order.table = int(response[key])
+                except:
+                    pass #Lazy solution, but obscure if exception is raised. TODO: Fix esception handling for better maintainability.
+                         #Also TODO: add logic to check table availability and remove unavailable tables (will require a Table model)
+            elif key == "party":
+                print(f'party: {value}')
+                try:
+                    order.party = int(response[key])
+                except:
+                    pass #Lazy solution, but obscure if exception is raised. TODO: Fix esception handling for better maintainability.
+                         #Also TODO: add logic to check persons vs table availability (will probably require changes to the table selection UI and logic)
+        order.status = 'P'
+        order.save()
+        if not order.total:
+            order.delete()
+            return redirect('order-menu')
+    
+    return render(request, 'restaurant/order_confirmation.html', {'order': order, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
 
 @login_required
 def staff(request):

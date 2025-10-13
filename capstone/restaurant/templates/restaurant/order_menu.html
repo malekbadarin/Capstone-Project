@@ -24,7 +24,8 @@
                             <p class='dish-ingredients'><em>{{ item.ingredients }}</em></p>
                             <div class="container add-remove-quantity">
                                 <p class='button'>-</p>
-                                <input type="number" id="{{ item.id }}" name="{{ item.id}}" min="0">
+                                <input type="hidden" name="{{ item.name }}" value="0"> {% comment %} Force form to submit 0 if the quantity of the acutal input is 0 {% endcomment %}
+                                <input type="number" id="{{ item.name }}" name="{{ item.name }}" min="0" value="{{ item.quantity }}">
                                 <p class='button'>+</p>
                             </div>
                         </div>
@@ -32,11 +33,11 @@
                 {% endfor %}
             </div>
             <div class='container review-button'>
-                <button type="submit" class='button'>Review and place order</button>
+                <button type="submit" class='button'>Review order</button>
             </div>
         </form>
-        {% comment %}
-            Older iteration that did not utilise form logic.
+        {% comment %}Older iteration that did not utilise form logic.
+            
             <div class='container menu-container'>
                 {% for item in menu %}
                     {% if item.is_available %}

@@ -1,4 +1,5 @@
 * {
+    /* border: 1px red dashed; */
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
@@ -76,8 +77,32 @@ header{
     justify-content: center;
 }
 
-form{
-    flex-direction: column;
+#exclude{
+    border: none;
+}
+
+form:not(#exclude){
+    flex-direction: column; 
+    border-bottom: 2px #42bbbb solid;
+    border-left: 2px #42bbbb solid;
+    border-right: 2px #42bbbb solid;
+    border-radius: 5px;;
+    margin: 5px;
+    padding: 10px; 
+}
+
+.dish-ingredients, .allergens{
+    font-style: italic;
+}
+
+.dish-img {
+    max-height: 25%;
+    max-width: 25%;
+}
+
+.allergen-icon{
+    max-height: 5%;
+    max-width: 5%;
 }
 
 footer, footer * {
@@ -107,9 +132,12 @@ footer {
     padding: 10px 0;
 }
 
-@media screen and (max-width: 500px){
+@media screen and (max-width: 430px){
     .nav-list{
         display: block;
+    }
+    .breadcrumbs-item{
+        padding: 20px 40px;
     }
 }
 
@@ -121,7 +149,8 @@ footer {
 }
 
 @media screen and (max-width: 300px){
-    *{
+    *:not(.dish-img):not(.allergen-icon){
+        max-height: 50% !important;
         display: block !important;
         position: static !important;
         min-width: 0 !important;
@@ -129,13 +158,13 @@ footer {
         font-size: 1em !important;
         transform: rotate(0) !important;
     }
-    img{
+    img:not(.allergen-icon){
         max-height: 50% !important;
         max-width: 50% !important;
     }
     .sticky{
         position: sticky !important;
-        top: 2em !important;
+        text-align: center;
         z-index: 2;
     }
 }

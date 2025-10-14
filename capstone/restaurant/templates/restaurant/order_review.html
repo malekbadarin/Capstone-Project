@@ -1,13 +1,15 @@
 {% extends "restaurant/base.html" %}
 {% load static %}
 
+{% block stylesheet %}<link rel="stylesheet" href="{% static 'restaurant/css/order_review.css' %}">{% endblock %}
+
 {% block content %}
     <main class='container'>
         <div class='container heading'>
             <h1>Review Order</h1>
         </div>
             <div class='container breadcrumbs'>
-                <ul class='container breadcrumbs-list'>
+                <ul class='container-flex breadcrumbs-list'>
                     <li class='breadcrumbs-item inactive'><a href="{% url 'order-menu' %}">Menu</a></li>
                     <li class='breadcrumbs-item active'>Review</li>
                     <li class='breadcrumbs-item inactive'>Confirmation</li>
@@ -16,24 +18,30 @@
             <form class='container review' action="{% url 'order-confirmation' order.id %}" method='post'>
                 {% csrf_token %}
                 {% for item in order.orderitem_set.all %}
-                    <div class='container review-card'>
-                        <img class='review-card-img' src="{% static 'restaurant/images/delivery_info/'|add:order.order_type|add:'.png' %}" alt="{{ item.menu_item.name }}">
-                        <div class='container review-card-text'>
-                            <h3 class='review-card-name'>{{ item.menu_item.name }}</h3>
-                            <p class='review-card-desc'>{{ item.menu_item.desc }}</p>
-                            {% if item.menu_item.allergen != 'NA' %}   
-                                <img class='allergen-icon' src="{% static 'restaurant/images/allergens/'|add:item.menu_item.allergen|add:'.png' %}" alt="{{ item.menu_item.get_allergen_display }}">
-                            {% endif %}
-                        </div>
-                        <h3 class='review-card-subtotal'>{{ item.subtotal }}</h3>
-                        <div class='review-card-quantity'>
-                            <p class='sub-button button'>-</p>
-                            <input class='qty-input' type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min=0 value="{{ item.quantity }}"> 
-                            <p class='add-button button'>+</p>
+                    <div class='container-flex review-card'>
+                        <img class='dish-img' src="{% static 'restaurant/images/dishes/dish-placeholder.png' %}" alt="{{ item.menu_item.name }}">
+                            <div class='container review-card-text'>
+                                <h3 class='review-card-name'>{{ item.menu_item.name }}</h3>
+                                <p class='review-card-desc'>{{ item.menu_item.desc }}</p>
+                                {% if item.menu_item.allergen != 'NA' %}
+                                    <p class='allergens'>Allergens:</p>
+                                    <img class='allergen-icon' src="{% static 'restaurant/images/allergens/'|add:item.menu_item.allergen|add:'.png' %}" title="{{ item.menu_item.get_allergen_display }}" alt="{{ item.menu_item.get_allergen_display }}">
+                                {% else %}
+                                    <p class='allergens'><br>Contains no allergens.</p>
+                                {% endif %}
+                            </div>
+                        <div class='container-flex quantity-price'>
+                            <h3 class='review-card-subtotal'>{{ item.subtotal }}</h3>
+                            <div class='container-flex review-card-quantity'>
+                                <p class='sub-button button'>-</p>
+                                <input class='qty-input' type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min=0 value="{{ item.quantity }}"> 
+                                <p class='add-button button'>+</p>
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
                 <div class='container total'>
+                    <hr>
                     <h3>Total:</h3>
                     <h3>{{ order.total }}</h3>
                 </div>
@@ -41,27 +49,31 @@
                     <p>Your order type: <a href={% url 'order-menu' %}>{{ order.get_order_type_display }}</a></p>
                     {% if order.order_type == 'I' %}
                         <label id='reservation-datetime-label' for="reservation-datetime">Reservation date and time:</label>
-                        <input type="datetime-local" id="reservation-datetime" name="reservation-datetime" step="900"><span id='reservation-warning' style='color: red;'></span>
+                        <input type="datetime-local" id="reservation-datetime" name="reservation-datetime"><span id='reservation-warning' style='color: red;'></span>
                         <label for="reservation-table">Select your table:</label>
                         <select id="table" name="table">
                             {% for table in tables %}
                                 <option value="{{ table }}">Table {{ table }}</option>
                             {% endfor %}
                         </select>
-                        <p class='sub-button button'>-</p>
-                        <label for="party">Party:</label>
-                        <input class='qty-input' type="number" id='party' name="party" min="1" max="20" value="1">
-                        <span> person(s).</span>
-                        <p class='add-button button'>+</p>
+                        <div class='container-flex party-container'>
+                            <label for="party">Party:</label>
+                            <p class='sub-button button'>-</p>
+                            <input class='qty-input' type="number" id='party' name="party" min="1" max="20" value="1">
+                            <p class='add-button button'>+</p>
+                            <span> person(s).</span>
+                        </div>
                     {% elif order.order_type == 'P' %}
                         <label for="pickup-time">Pick-up time:</label>
-                        <input type="time" id="pickup-time" name="pickup-time" step="900"><span id='pickup-warning' style='color: red;'></span>
+                        <input type="time" id="pickup-time" name="pickup-time"><span id='pickup-warning' style='color: red;'></span>
                     {% else %}
                         <input type="" class='input-choice' id="address" name="address" default="{{ user.address }}">
                     {% endif %}
                 </div>
-                <button type="submit" class='button submit'>Place order</button>
-                <p><a class='button' href={% url 'order-menu' %}>Back to menu</a></p>
+                <div class='container-flex container-buttons'>
+                    <p class='button'><a href={% url 'order-menu' %}>Back to menu</a></p>
+                    <button type="submit" class='button submit'>Place order</button>
+                </div>
             </form>
             {% comment %}
                 older iteration without a proper form

@@ -45,8 +45,11 @@
                             <div class='container'>
                                 <h3 class='dish-name'>{{ item.name }}</h3>
                                 <p class='dish-desc'>{{ item.desc }}</p>
-                                {% if item.allergen != 'NA' %}   
-                                    <img class='allergen-icon' src="{% static 'restaurant/images/allergens/'|add:item.allergen|add:'.png' %}" alt="{{ item.get_allergen_display }}">
+                                {% if item.allergen != 'NA' %}
+                                    <p class='allergens'>Allergens:</p>
+                                    <img class='allergen-icon' src="{% static 'restaurant/images/allergens/'|add:item.allergen|add:'.png' %}" title="{{ item.get_allergen_display }}" alt="{{ item.get_allergen_display }}">
+                                {% else %}
+                                    <p class='allergens'>Contains no allergens.</p>
                                 {% endif %}
                                 <p class='dish-ingredients'>{{ item.ingredients }}</p>
                             </div>

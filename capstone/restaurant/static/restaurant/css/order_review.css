@@ -1,0 +1,59 @@
+.review-card{
+    align-items: center;
+    padding: 5px 0;
+}
+.review-card-text{
+    align-self: flex-start;
+    margin-right: 20px;
+    border-bottom: 1px #42bbbb solid;
+}
+.quantity-price{
+    position: relative;
+    bottom: 15px;
+    flex-direction: column;
+    align-items: flex-end;
+}
+form{
+    border-top: 2px #42bbbb solid;
+}
+hr{
+    color: #42bbbb;
+}
+.total{
+    text-align: right;
+}
+.allergen-icon{
+    max-width: 10%;
+    max-height: 10%;
+}
+.dish-img{
+    max-width: 17.5%;
+    max-height: 17.5%;
+}
+.party-container{
+    justify-content: flex-start;
+}
+.party-container *{
+    margin: 0 5px;
+}
+.qty-input{
+    max-width: 30px;
+}
+.container-buttons{
+    justify-content: flex-end;
+    min-height: 10%; 
+}
+.container-buttons > *{
+    padding: 5px;
+    margin: 5px;
+    font-size: 1.5em;
+}
+.container-buttons *{
+    background-color: #42bbbb;
+}
+
+@media screen and (max-width: 430px) {
+    .container-buttons > *{
+        font-size: 1em;
+    }
+}

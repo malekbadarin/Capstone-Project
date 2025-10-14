@@ -3,45 +3,61 @@
 
 {% block title %}Menu{% endblock %}
 
+{% block stylesheet %}
+    <link href="{% static 'restaurant/css/order_menu.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <main class='container'>
         <div class='container heading'>
             <h1>Our Menu</h1>
-            <h3>Add items to your order!</h3>
+            <h2>Add items to your order!</h2>
         </div>
-        <form class='container form' action="{% url 'order-review' %}" method='post'>
+        <ul class='container-flex breadcrumbs-list'>
+                    <li class='breadcrumbs-item active'>Menu</li>
+                    <li class='breadcrumbs-item inactive'>Review</li>
+                    <li class='breadcrumbs-item inactive'>Confirmation</li>
+        </ul>
+        <form class='container-flex form' action="{% url 'order-review' %}" method='post'>
             {% csrf_token %}
-            <div class='container review-button'>
-                <button type="submit" class='button'>Review order</button>
-            </div>
-            <label for="order-type">Select your order type:</label>
+            <div class='container-flex sticky'>
+                <div>
+                    <h3>Total:</h3>
+                    <h3 id='total-heading'></h3><span> JOD</span>
+                </div>
+                <button type="submit" class='review-button button'>
+                    <h3>Review order</h3>
+                </button>
+                <div class='container-flex order-type'>
+                    <label for="order-type">Select your order type:</label>
                     <select id="order-type" name="order-type">
                         <option value="I">Dine In</option>
                         <option value="P">Pickup</option>
                         <option value="D">Delivery</option>
                     </select>
+                </div>
+            </div>
             <div class='container menu'>
                 {% for item in menu %}
                     {% if item.is_available %}
-                        <div class='container card' id="dish-{{ item.id }}">
-                            <img class='dish-img' src="{% static 'restaurant/images/dishes/dish'|add:item.id|add:'.png' %}" alt="{{ item.desc }}">
-                            <h3 class='dish-name'>{{ item.name }}</h3>
-                            <p class='dish-desc'>{{ item.desc }}</p>
-                            {% if item.allergen != 'NA' %}   
-                                <img class='allergen-icon' src="{% static 'restaurant/images/allergens/'|add:item.allergen|add:'.png' %}" alt="{{ item.get_allergen_display }}">
-                            {% endif %}
-                            <p class='dish-ingredients'><em>{{ item.ingredients }}</em></p>
-                            <div class="container add-remove-quantity">
+                        <div class='container-flex card' data-price="{{ item.unit_price }}" id="dish-{{ item.id }}">
+                            <img class='dish-img' src="{% static 'restaurant/images/dishes/dish-placeholder.png'  %}" alt="{{ item.desc }}">
+                            <div class='container'>
+                                <h3 class='dish-name'>{{ item.name }}</h3>
+                                <p class='dish-desc'>{{ item.desc }}</p>
+                                {% if item.allergen != 'NA' %}   
+                                    <img class='allergen-icon' src="{% static 'restaurant/images/allergens/'|add:item.allergen|add:'.png' %}" alt="{{ item.get_allergen_display }}">
+                                {% endif %}
+                                <p class='dish-ingredients'>{{ item.ingredients }}</p>
+                            </div>
+                            <div class="container-flex add-remove-quantity">
                                 <p class='button sub-button'>-</p>
-                                <input class='qty-input' type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min="0" value="{{ item.quantity|default:"0" }}">
+                                <input class='button qty-input' type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min="0" value="{{ item.quantity|default:"0" }}">
                                 <p class='button add-button'>+</p>
                             </div>
                         </div>
                     {% endif %}
                 {% endfor %}
-            </div>
-            <div class='container review-button'>
-                <button type="submit" class='button'>Review order</button>
             </div>
         </form>
         {% comment %}Older iteration that did not utilise form logic.

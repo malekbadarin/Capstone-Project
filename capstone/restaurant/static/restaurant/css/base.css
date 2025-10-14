@@ -2,6 +2,7 @@
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
+    transition: ease all 175ms;
 }
 
 button, input[type="submit"] {
@@ -14,29 +15,55 @@ button, input[type="submit"] {
   outline: inherit;
 }
 
-button {
+button, a:visited, a {
     text-decoration: underline;
     color: #3366cc;
 }
 
-button:hover {
-    color: #504c9d
+button:hover, a:hover, .button:hover {
+    color: red;
+    cursor: pointer;
 }
 
 .button {
-    border-radius: 5px;   
+    border-radius: 5px;
+}
+
+.add-button, .sub-button{
+    border-radius: 50%;
+    width: 1em;
+    line-height: 1;
+    background-color: #42bbbb;
+    text-align: center;
+    aspect-ratio: 1 / 1;
+    vertical-align: middle;
+}
+
+header{
+    position: relative;
 }
 
 #logo {
     margin: 30px 0 0 30px;
+    border-radius: 5px;
+    background-color: #f0f0f0;
 }
 
-.nav-list {
+.nav-list, .breadcrumbs-list {
     list-style: none;
 }
 
 .nav-item {
     margin: 0 5px 0 0;
+}
+
+.breadcrumbs-item{
+    padding: 20px 80px;
+}
+
+.breadcrumbs-item.active{
+    text-decoration: underline;
+    font-weight: bold;
 }
 
 .container-flex {
@@ -45,13 +72,30 @@ button:hover {
     align-items: center;
 }
 
-footer * {
+.breadcrumbs-list{
+    justify-content: center;
+}
+
+form{
+    flex-direction: column;
+}
+
+footer, footer * {
     background-color: #e6e6e6;
+}
+
+.footer-blobs > div {
+    flex: 1;
 }
 
 footer {
     margin-top: 30px;
+    padding: 0 30px;
     border-top: 1px solid #000;
+}
+
+.text-center, .heading{
+    text-align: center;
 }
 
 .superscript {
@@ -59,7 +103,39 @@ footer {
     vertical-align: super;
 }
 
-/*
-img{
-    display: none;
-}*/
+#copyright {
+    padding: 10px 0;
+}
+
+@media screen and (max-width: 500px){
+    .nav-list{
+        display: block;
+    }
+}
+
+@media screen and (max-width: 344px){
+    *{
+        padding: 0 !important; 
+        margin: 0 !important;
+    }
+}
+
+@media screen and (max-width: 300px){
+    *{
+        display: block !important;
+        position: static !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        font-size: 1em !important;
+        transform: rotate(0) !important;
+    }
+    img{
+        max-height: 50% !important;
+        max-width: 50% !important;
+    }
+    .sticky{
+        position: sticky !important;
+        top: 2em !important;
+        z-index: 2;
+    }
+}

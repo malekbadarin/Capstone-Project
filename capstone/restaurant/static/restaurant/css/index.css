@@ -19,7 +19,7 @@
 }
 
 .button {
-    width: 48%;
+    width: 50%;
 }
 
 .transparent-img-label {
@@ -28,6 +28,7 @@
     left: 0;
     background: #00000080;
     color: #e6e6e6;
+    text-align: center;
 }
 
 .button-img {
@@ -55,4 +56,24 @@ img {
 .button-img-sub{
     position: relative;
     background-color: #e6e6e6;
+}
+
+@media screen and (max-width: 675px){
+    .button-img .transparent-img-label{
+        bottom: 10%;
+        font-size: 1em;
+        font-weight: 500;
+    }
+}
+
+@media screen and (max-width: 500px){
+    .nav-list{
+        display: block;
+    }
+    .transparent-img-label{
+        position: static;
+    }
+    #gallery-img-container{
+        transform: rotate(0);
+    }
 }

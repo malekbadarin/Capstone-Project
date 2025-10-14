@@ -1,0 +1,77 @@
+.card{
+    padding: 30px 30px 0 30px;
+}
+.dish-img {
+    max-height: 25%;
+    max-width: 25%;
+}
+.dish-ingredients{
+    font-style: italic;
+}
+
+.add-remove-quantity * {
+    padding: 7px;
+}
+
+.qty-input {
+    width: 30px;
+    padding: 0;
+}
+
+.sticky{
+    position: sticky;
+    justify-content: space-between;
+    top: 0;
+    left:0;
+    width: 90vw;
+    height: 10vh;
+}
+
+.review-button{
+    height: 100%;
+    width: 100%;
+    padding: 0 25%;
+}
+
+.review-button, .review-button *{
+    background-color: #42bbbb;
+}
+
+.order-type{
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    margin-right: 30px;
+}
+
+.order-type select{
+    align-self: center;
+    font-weight: bold;
+    font-size: 1.05em;
+}
+
+#total-heading{
+    padding-left: 15px;
+}
+
+@media screen and (max-width: 768px){
+    .card{
+        display: block;
+    }
+    /* .card *{
+        margin-left: auto;
+        width: fit-content;
+    } */
+    .breadcrumbs-item{
+    padding: 20px;
+    }
+    .order-type label{
+        display: none;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .sticky{
+        height: 15vh;
+    }
+}

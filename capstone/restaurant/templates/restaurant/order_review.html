@@ -40,8 +40,8 @@
                 <div class='container review-delivery-options'>
                     <p>Your order type: <a href={% url 'order-menu' %}>{{ order.get_order_type_display }}</a></p>
                     {% if order.order_type == 'I' %}
-                        <label for="reservation-datetime">Reservation date and time:</label>
-                        <input type="datetime-local" id="reservation-datetime" name="reservation-datetime" value="2025-04-01T00:00">
+                        <label id='reservation-datetime-label' for="reservation-datetime">Reservation date and time:</label>
+                        <input type="datetime-local" id="reservation-datetime" name="reservation-datetime" step="900"><span id='reservation-warning' style='color: red;'></span>
                         <label for="reservation-table">Select your table:</label>
                         <select id="table" name="table">
                             {% for table in tables %}
@@ -55,7 +55,7 @@
                         <p class='add-button button'>+</p>
                     {% elif order.order_type == 'P' %}
                         <label for="pickup-time">Pick-up time:</label>
-                        <input type="time" id="pickup-time" name="pickup-time" value="00:00">
+                        <input type="time" id="pickup-time" name="pickup-time" step="900"><span id='pickup-warning' style='color: red;'></span>
                     {% else %}
                         <input type="" class='input-choice' id="address" name="address" default="{{ user.address }}">
                     {% endif %}

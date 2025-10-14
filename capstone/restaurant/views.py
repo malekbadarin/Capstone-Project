@@ -144,8 +144,7 @@ def order_review(request):
                 if key in order_item_names:
                     old_quantity = order.orderitem_set.get(menu_item__name = key).quantity
                     #print(f'---item_id {menu_item_id} old quantity {old_quantity} new quantity {int(value)}---')
-                    if int(value) != old_quantity:
-                        order.update_item(menu_item_id, int(value))
+                    order.update_item(menu_item_id, int(value))
                     continue
                 else:
                     order.add_item(menu_item_id, int(value))

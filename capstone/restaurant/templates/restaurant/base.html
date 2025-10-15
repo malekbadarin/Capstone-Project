@@ -18,21 +18,21 @@
             {% block body %}
             <nav class='container-flex'>
                 {% if user.is_authenticated %}
-                    <ul class='container-flex nav-list'>
-                        {% for path in auth_paths %}
-                            {% if path != request.resolver_match.view_name %}
-                                <li class='nav-item'><a href="{% url path %}">{{path|capfirst}}</a></li>
-                            {% else %}
-                                <li class='nav-item'>{{path|capfirst}}</li>
-                            {% endif %}
-                        {% endfor %}
-                        <li class='nav-item'>
-                            <form id='exclude' method="post" action="{% url 'logout' %}">
-                                {% csrf_token %}
-                                    <button type="submit">Log out</button>
-                            </form>
-                        </li>
-                    </ul>
+                        <ul class='container-flex nav-list'>
+                            {% for path in auth_paths %}
+                                {% if path != request.resolver_match.view_name %}
+                                    <li class='nav-item'><a href="{% url path %}">{{path|capfirst}}</a></li>
+                                {% else %}
+                                    <li class='nav-item'>{{path|capfirst}}</li>
+                                {% endif %}
+                            {% endfor %}
+                            <li class='nav-item'>
+                                <form id='exclude' method="post" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                        <button class='button' type="submit">Log out</button>
+                                </form>
+                            </li>
+                        </ul>
                 {% else %}
                     <ul class='container-flex nav-list'>
                         {% for path in guest_paths %}
@@ -44,8 +44,11 @@
                         {% endfor %}
                     </ul>
                 {% endif %}
-            </nav>                
+            </nav>
         </header>
+        <hr>
+        <h3 class='text-center'>You are now logged in as {{user.username|capfirst|default:'Guest'}}!</h3>
+        <hr>
         {% endblock %}
         {% block content %}
         {% endblock %}
@@ -58,7 +61,7 @@
                     <p class='text-center'><a href='#'>Privacy Policy / Terms of Use</a></p>
                 </div>
                 <div>
-                    <p class='text-center'><a href="https://maps.google.com/maps/dir//%D8%B4%D8%A7%D9%88%D8%B1%D9%85%D8%A7+%D8%A3%D8%A8%D9%88+%D8%AD%D8%A7%D8%AA%D9%85+Abu+Hatem+Shawerma+Karamah+St+Amman+Jordan%E2%80%AD/@32.050994,35.8783848,14z/data=!4m5!4m4!1m0!1m2!1m1!1s0x151c9e5a362daa79:0xa62d9102ddf9ea90">Directions</a></p>
+                    <p class='text-center'><a class='button' href="https://www.google.com/maps/dir//General+Assembly,+10+E+21st+St,+New+York,+NY+10010,+United+States/@40.7399045,-73.9927773,715m/">Directions</a></p>
                 </div>
             </div>
             <div>

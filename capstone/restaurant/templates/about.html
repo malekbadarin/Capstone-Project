@@ -3,14 +3,30 @@
 
 {% block title %}About{% endblock %}
 
-{% block main-header %}
-    <h1>About the Restaurant</h1>
+{% block stylesheet %}
+    <link href="{% static "restaurant/css/about.css" %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <h2>History</h2>
-    <p>Established in 2025 by Malek</p>
-    <p>Contact</p>
-    <p>Locatoin:</p>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13028.11422238904!2d35.86738865358701!3d32.049255567323726!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151c9e5a362daa79%3A0xa62d9102ddf9ea90!2z2LTYp9mI2LHZhdinINij2KjZiCDYrdin2KrZhSBBYnUgSGF0ZW0gU2hhd2VybWE!5e1!3m2!1sen!2sqa!4v1760078941858!5m2!1sen!2sqa" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <main class='container'>
+        <div class='content'>
+            <h1>About the Restaurant</h1>
+            <div class='history'>
+                <h2>History</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam quam nisl, cursus sit amet convallis ut, mattis vitae justo. Nulla volutpat ipsum at facilisis porta. Integer in ipsum sed tellus rhoncus scelerisque. Sed condimentum metus in ultricies finibus. Fusce consequat dolor pretium molestie semper. Nullam aliquet placerat diam, et maximus justo. Nullam in bibendum tellus. In lobortis sapien sit amet lectus congue, sed posuere lorem ullamcorper. In non magna nec risus consequat dictum vitae ac velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ultrices metus erat, et aliquet tortor ullamcorper vel. Duis mauris tortor, molestie eu convallis nec, ultricies tempor odio. Maecenas varius gravida arcu cursus congue.</p>
+            </div>
+            <div class='contact'>
+                <h2>Contact</h2>
+                <ul>
+                    <li>Address: Lorem ipsum dolor sit amet.</li>
+                    <li>Phone: <a href='tel:+962777777777'>Lorem ipsum dolor sit amet.</a></li>
+                    <li>Email: <a href='mailto:email@website.com'>Lorem ipsum dolor sit amet.</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class='map'>
+            <h2>Locatoin:</h2>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3113.538218028531!2d-73.99277732397296!3d40.739904471389394!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a3c1c4784f%3A0x3884039b8867e84b!2sGeneral%20Assembly!5e1!3m2!1sen!2sqa!4v1760518101502!5m2!1sen!2sqa" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </main>
 {% endblock %}

@@ -14,7 +14,7 @@ guest_paths_list = [
     'about',
     'login',
     'signup',
-    'staff',
+    #'staff',
 ]
 
 auth_paths_list = [

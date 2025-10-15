@@ -4,7 +4,7 @@
 }
 .review-card-text{
     align-self: flex-start;
-    margin-right: 20px;
+    margin: 0 20px;
     border-bottom: 1px #42bbbb solid;
 }
 .quantity-price{
@@ -15,9 +15,6 @@
 }
 form{
     border-top: 2px #42bbbb solid;
-}
-hr{
-    color: #42bbbb;
 }
 .total{
     text-align: right;
@@ -44,7 +41,6 @@ hr{
     min-height: 10%; 
 }
 .container-buttons > *{
-    padding: 5px;
     margin: 5px;
 }
 .container-buttons *{

@@ -5,11 +5,8 @@
 
 {% block content %}
     <main class='container'>
-        <div class='container heading'>
-            <h1>Review Order</h1>
-        </div>
             <div class='container breadcrumbs'>
-                <ul class='container-flex breadcrumbs-list'>
+                <ul class='container-flex breadcrumbs-list pointless'>
                     <li class='breadcrumbs-item inactive'><a href="{% url 'order-menu' %}">Menu</a></li>
                     <li class='breadcrumbs-item active'>Review</li>
                     <li class='breadcrumbs-item inactive'>Confirmation</li>
@@ -71,8 +68,8 @@
                     {% endif %}
                 </div>
                 <div class='container-flex container-buttons'>
-                    <p class='button'><a class='button' href={% url 'order-menu' %}>Back to menu</a></p>
-                    <button type="submit" class='button submit'>Place order</button>
+                    <p><a class='button bigger-button' href={% url 'order-menu' %}>Back to menu</a></p>
+                    <button type="submit" class='button bigger-button submit'>Place order</button>
                 </div>
             </form>
             {% comment %}

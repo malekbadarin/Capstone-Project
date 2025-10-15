@@ -11,21 +11,45 @@
 }
 
 p, a, li, button{
-    font-size: 20px;
+    font-size: 1.25rem;
 }
 
-button:hover, a:hover, .button:hover {
-    color: red;
+h1{
+    font-size: 2rem;
+}
+
+h2{
+    font-size: 1.75rem;
+}
+
+h3{
+    font-size: 1.5rem;
+}
+
+button:hover, a:hover, .button:hover, .nav-lsit:hover {
+    color: red !important;
     cursor: pointer;
     text-decoration: underline;
 }
 
 .button {
-    padding: 0 5px;
     border-radius: 5px;
     background-color: #42bbbb;
     color: #f0f0f0;
-    width: fit-content;
+}
+
+.bigger-button{
+    padding: 10px;
+}
+
+input{
+    text-align: center;
+    border: 1px #42bbbb solid;
+    border-radius: 5px;
+}
+
+.qty-input{
+    border: none;
 }
 
 .add-button, .sub-button{
@@ -36,6 +60,10 @@ button:hover, a:hover, .button:hover {
     text-align: center;
     aspect-ratio: 1 / 1;
     vertical-align: middle;
+}
+
+#user-greeting{
+    margin-bottom: 15px;
 }
 
 header{
@@ -49,10 +77,13 @@ header{
 }
 
 .nav-list, .breadcrumbs-list {
-    list-style: none;
     border: 1px #42bbbb solid;
     border-radius: 20px;
     padding: 0 10px;
+}
+
+.pointless{
+    list-style: none;
 }
 
 .nav-list, .nav-list *{

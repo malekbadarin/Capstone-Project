@@ -18,7 +18,7 @@
             {% block body %}
             <nav class='container-flex'>
                 {% if user.is_authenticated %}
-                        <ul class='container-flex nav-list'>
+                        <ul class='container-flex nav-list pointless'>
                             {% for path in auth_paths %}
                                 {% if path != request.resolver_match.view_name %}
                                     <li class='nav-item'><a href="{% url path %}">{{path|capfirst}}</a></li>
@@ -34,7 +34,7 @@
                             </li>
                         </ul>
                 {% else %}
-                    <ul class='container-flex nav-list'>
+                    <ul class='container-flex nav-list pointless'>
                         {% for path in guest_paths %}
                             {% if path != request.resolver_match.view_name %}
                                 <li class='nav-item'><a href="{% url path %}">{{path|capfirst}}</a></li>
@@ -47,7 +47,7 @@
             </nav>
         </header>
         <hr>
-        <h3 class='text-center'>You are now logged in as {{user.username|capfirst|default:'Guest'}}!</h3>
+        <h3 class='text-center' id='user-greeting'>You are now logged in as {{user.username|capfirst|default:'Guest'}}!</h3>
         <hr>
         {% endblock %}
         {% block content %}
@@ -61,7 +61,7 @@
                     <p class='text-center'><a href='#'>Privacy Policy / Terms of Use</a></p>
                 </div>
                 <div>
-                    <p class='text-center'><a class='button' href="https://www.google.com/maps/dir//General+Assembly,+10+E+21st+St,+New+York,+NY+10010,+United+States/@40.7399045,-73.9927773,715m/">Directions</a></p>
+                    <p class='text-center'><a class='bigger-button button' href="https://www.google.com/maps/dir//General+Assembly,+10+E+21st+St,+New+York,+NY+10010,+United+States/@40.7399045,-73.9927773,715m/">Directions</a></p>
                 </div>
             </div>
             <div>

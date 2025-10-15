@@ -21,6 +21,7 @@ auth_paths_list = [
     'home',
     'about',
     'order-menu',
+    'profile',
     'staff',
 ]
 
@@ -223,6 +224,12 @@ def order_confirmation(request, order_id):
     #else:
     #    print('------------GET-------------')
     return render(request, 'restaurant/order_confirmation.html', {'order': order, 'auth_paths': auth_paths_list})
+
+@login_required
+def profile(request):
+    user = request.user
+    orders = Order.objects.filter(user=user)
+    return render(request, "user/profile.html", {'orders':orders, 'auth_paths': auth_paths_list})
 
 @login_required
 def staff(request):

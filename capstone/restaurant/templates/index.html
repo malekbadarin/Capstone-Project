@@ -11,7 +11,7 @@
             <div class='container' id='hero-desc'>
                 <h1>Lorem ipsum.<br>Dolor sit.</h1>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris sapien erat, mollis et tempor vitae, commodo gravida mauris. Donec massa neque, malesuada a condimentum eu.</p>
-                <p class='button'><a href="{% url 'about' %}">Our story</a></p>
+                <p><a class='button story-button bigger-button' href="{% url 'about' %}">Our story</a></p>
             </div>
             <div class='container' id='gallery-img-container'>
                 <img class='rotate-45 card-transition' id='gallery-img' src="{% static 'restaurant/images//gallery/gallery_1.png' %}" alt="Gallery image 1">
@@ -19,18 +19,18 @@
             </div>
         </section>
         <section class='container-flex' id='buttons-section'>
-            <a href="{% url 'order-menu' %}">
-                <div class='container-flex button-img button'>
+            <a class='container-flex button-img button' href="{% url 'order-menu' %}">
+                
                     <img class='index-img' id='view-menu-img' src="{% static 'restaurant/images/view_menu_button.png' %}" alt="View Menu">
                     <h3 class="transparent-img-label">VIEW MENU</h3>
-                </div>
+                
             </a>
             {% if not user.is_authenticated %}
-                <a href="{% url 'login' %}">
-                    <div class='container-flex button-img button'>
+                <a class='container-flex button-img button' href="{% url 'login' %}">
+                    
                             <img class='index-img' id='login-img' src="{% static 'restaurant/images/start_order_button.png' %}" alt="Start Order">
                             <h3 class="transparent-img-label">START ORDER</h3>
-                    </div>
+                    
                 </a>
             {% endif %}
         </section>

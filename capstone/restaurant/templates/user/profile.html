@@ -1,0 +1,45 @@
+{% extends "restaurant/base.html" %}
+{% load static %}
+
+{% block title %}{{user.username|capfirst}}'s profile{% endblock %}
+
+{% block stylesheet %}
+    <link href="{% static 'user/css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <main>
+        <h1>Welcome {{user.username|capfirst}}!</h1>
+        <div class='felx-container content'>
+            <div class='container-flex user-card'>
+                <div class='user-info'>
+                    <p>Name: {{user.username|capfirst}}</p>
+                    <p>Addresses:</p>
+                    <ul>
+                        {% for address in addresses %}
+                            <li>{{address.detailed_address}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <img id='profile-pic' src="{% static '' %}" alt='User profile pic' title="{{user.username|capfirst}}">
+            </div>
+            <div class='container-flex orders-container'>
+            {% for order in orders %}
+                <div class='order-card'>
+                    <p>Order no.: {{order.confirmation_number}}</p>
+                    <ul class='pointless'>
+                    {% for item in order.orderitem_set.all %}
+                        <li>{{item.name}} x {{item.quantity}} ({{item.subtotal}})</li>
+                {% endfor %}
+                    </ul>
+                    <p>Total: {{order.total}}</p>
+                    <div class='container-flex buttons-container'>
+                        <p><a class='button' href="#">Edit order</a></p>
+                        <p><a class='button' href="#">Cancel order</a></p>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </main>
+{% endblock %}

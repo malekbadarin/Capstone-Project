@@ -109,6 +109,10 @@ class Order(models.Model):
         return sum(item.menu_item.unit_price * item.quantity for item in self.orderitem_set.all())
     
     @property
+    def allitems(self):
+        return self.orderitem_set.all()
+    
+    @property
     def pickup_time(self):
         return self.reservation_time.time()
     
@@ -134,14 +138,22 @@ class OrderItem(models.Model):
     
     @property
     def subtotal(self):
-        return self.menu_item.unit_price * self.quantity
+        return self.price * self.quantity
+    
+    @property
+    def name(self):
+        return self.menu_item.name
+    
+    @property
+    def price(self):
+        return self.menu_item.unit_price
     
     @property
     def html_name(self):
-        return self.menu_item.name.replace(" ", "___")
+        return self.name.replace(" ", "___")
     
     def __str__(self):
-        return f'{self.quantity} x {self.menu_item.name} (JOD {self.menu_item.unit_price * self.quantity}) --- (Order info: {self.order})'
+        return f'{self.quantity} x {self.name} (JOD {self.price * self.quantity}) --- (Order info: {self.order})'
     
 class UserAddress(models.Model):
     building = models.CharField(

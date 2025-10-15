@@ -9,11 +9,11 @@ form{
 
 .add-remove-quantity * {
     padding: 7px;
+    height: 100%;
 }
 
 .qty-input {
     width: 30px;
-    padding: 0;
 }
 
 .sticky{
@@ -50,6 +50,10 @@ form{
 
 .total-container{
     width: 10%;
+}
+
+.card-text{
+    margin: 0 30px;
 }
 
 @media screen and (max-width: 768px){

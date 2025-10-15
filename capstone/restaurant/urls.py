@@ -9,6 +9,7 @@ urlpatterns = [
     path('signup/', views.signup, name = 'signup'),
     path('logout/', views.Logout.as_view(), name = 'logout'),
     path('order/menu/', views.order_menu, name = "order-menu"),
+    path('profile/', views.profile, name = 'profile'),
     #path('order/add-item/<int:item_id>', views.add_item, name = "add-item"), #outdated path used to update each line item then refresh the page
     #path('order/remove-item/<int:item_id>', views.remove_item, name = "remove-item"), #outdated path used to update each line item then refresh the page
     path('order/review/', views.order_review, name = 'order-review'), #order review, edit, and placement view

@@ -6,6 +6,12 @@
     max-width: 50%;
 }
 
+.story-button{
+    position: relative;
+    top: 15px;
+    padding: 10px;
+}
+
 #gallery-img-container {
     position: relative;
     justify-content: flex-end;
@@ -17,10 +23,6 @@
     margin: 50px 30px 0 30px;
     height: 20%;
     justify-content: center;
-}
-
-.button {
-    width: 50%;
 }
 
 .transparent-img-label {
@@ -38,12 +40,17 @@
     justify-content: center;
 }
 
-main a{
+main > a{
     margin: 0 2.5%;
 }
 
 #buttons-section a{
     width: 45%;
+}
+
+.button-img{
+    width: 45%;
+    height: 75%;
 }
 
 .index-img, .button-img{

@@ -9,11 +9,7 @@
 
 {% block content %}
     <main class='container'>
-        <div class='container heading'>
-            <h1>Our Menu</h1>
-            <h2>Add items to your order!</h2>
-        </div>
-        <ul class='container-flex breadcrumbs-list'>
+        <ul class='container-flex breadcrumbs-list pointless'>
                     <li class='breadcrumbs-item active'>Menu</li>
                     <li class='breadcrumbs-item inactive'>Review</li>
                     <li class='breadcrumbs-item inactive'>Confirmation</li>
@@ -42,7 +38,7 @@
                     {% if item.is_available %}
                         <div class='container-flex card' data-price="{{ item.unit_price }}" id="dish-{{ item.id }}">
                             <img class='dish-img' src="{% static 'restaurant/images/dishes/'|add:item.html_name|add:'.png' %}" alt="{{ item.desc }}" title="{{ item.name }}">
-                            <div class='container'>
+                            <div class='container card-text'>
                                 <h3 class='dish-name'>{{ item.name }}</h3>
                                 <p class='dish-desc'>{{ item.desc }}</p>
                                 {% if item.allergen != 'NA' %}

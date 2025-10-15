@@ -1,0 +1,12 @@
+.orders-container{
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.order-card{
+    width: 20%;
+    margin-left: 5%;
+    margin-top: 1%;
+    border: 2px #42bbbb solid;
+    border-radius: 10px;
+}

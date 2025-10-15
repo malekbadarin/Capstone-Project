@@ -158,7 +158,7 @@ def order_review(request):
             order.delete()
             return redirect('order-menu')
         else:
-            return render(request, 'restaurant/order_review.html', {'order': order, 'tables': [table for table in range(1,11)]})
+            return render(request, 'restaurant/order_review.html', {'order': order, 'tables': [table for table in range(1,11)], 'auth_paths': auth_paths_list})
     else:
         return redirect('order-menu')
 
@@ -222,7 +222,7 @@ def order_confirmation(request, order_id):
             return redirect('order-menu')
     #else:
     #    print('------------GET-------------')
-    return render(request, 'restaurant/order_confirmation.html', {'order': order, 'guest_paths': guest_paths_list, 'auth_paths': auth_paths_list})
+    return render(request, 'restaurant/order_confirmation.html', {'order': order, 'auth_paths': auth_paths_list})
 
 @login_required
 def staff(request):

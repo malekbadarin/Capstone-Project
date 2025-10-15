@@ -6,7 +6,8 @@ const pickUpTime = document.getElementById('pickup-time');
 const pickUpWarning = document.getElementById('pickup-warning');
 const dateTimeWarning = document.getElementById('reservation-warning');
 const dishDivs = document.getElementsByClassName('card');
-const totalHeading = document.getElementById('total-heading')
+const totalHeading = document.getElementById('total-heading');
+const subtotalHeadings = document.getElementsByClassName('review-card-subtotal');
 
 
 //Adds listeners to all +/- buttons and connect them to the corresponding quantity input feild and updates total on menu page
@@ -17,30 +18,38 @@ function priceHelper(input){
     return parseFloat(dishDivs[input].dataset.price);
 }
 let total = 0;
-for(let i = 0; i < dishDivs.length; i++){
-    total += quantityHelper(i) * priceHelper(i)
-    total = parseFloat(total.toFixed(2))
-}
-totalHeading.innerHTML = total;
-function updateTotal(input, operation) {
-    const itemPrice = parseFloat(dishDivs[input].dataset.price);
-    let updateValue = (itemPrice);
-    if (operation !== 'add') {
-        updateValue = -updateValue;
+function updateTotal(input=0, operation) {
+    if(operation='refresh'){
+        total = 0;
+        for(let i = 0; i < dishDivs.length; i++){
+            total += quantityHelper(i) * priceHelper(i)
+            total = parseFloat(total.toFixed(2))
+        }
+    }else{
+        if (operation == 'add') {
+            total += parseFloat(dishDivs[input].dataset.price);
+        }else{
+            total -= parseFloat(dishDivs[input].dataset.price);
+        }
     }
-    const finalValue = parseFloat(updateValue.toFixed(2));
-    total += finalValue;
     return parseFloat(total.toFixed(2));
+}
+totalHeading.innerHTML = updateTotal('refresh');
+function updateSubtotal(input){
+    let subtotal = quantityHelper(input) * priceHelper(input)
+    return subtotal.toFixed(2);
 }
 for(let i = 0; i < addButtons.length; i++){
     addButtons[i].addEventListener('click', function(){
         qtyInputs[i].value = quantityHelper(i) + 1;
         totalHeading.innerHTML = updateTotal(i, 'add');
+        subtotalHeadings[i].innerHTML = updateSubtotal(i);
     });
     subButtons[i].addEventListener('click', function(){
         if(qtyInputs[i].value != '0'){
-            totalHeading.innerHTML = updateTotal(i, 'sub');
             qtyInputs[i].value = quantityHelper(i) - 1;
+            totalHeading.innerHTML = updateTotal(i, 'sub');
+            subtotalHeadings[i].innerHTML = updateSubtotal(i);
         }
 
     })
@@ -48,6 +57,8 @@ for(let i = 0; i < addButtons.length; i++){
         if(!quantityHelper(i)){
             qtyInputs[i].value = 0;
         }
+        totalHeading.innerHTML = updateTotal('refresh');
+        subtotalHeadings[i].innerHTML = updateSubtotal(i);
     })
 }
 

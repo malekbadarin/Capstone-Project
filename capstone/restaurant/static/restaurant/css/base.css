@@ -3,7 +3,11 @@
     background-color: #f0f0f0;
     margin: 0;
     padding: 0;
-    transition: ease all 175ms;
+    transition: all 175ms;
+}
+
+p, a, li, button{
+    font-size: 20px;
 }
 
 button, input[type="submit"] {
@@ -18,7 +22,6 @@ button, input[type="submit"] {
 
 button, a:visited, a {
     text-decoration: underline;
-    color: #3366cc;
 }
 
 button:hover, a:hover, .button:hover {
@@ -52,10 +55,24 @@ header{
 
 .nav-list, .breadcrumbs-list {
     list-style: none;
+    border: 1px #42bbbb solid;
+    border-radius: 20px;
+    padding: 0 10px;
 }
 
-.nav-item {
+.nav-list, .nav-list *{
+    background-color: #42bbbb;
+    text-align: center;
+}
+
+.nav-item, .nav-item a {
     margin: 0 5px 0 0;
+    color: #f0f0f0;
+}
+
+.nav-item+.nav-item {
+    border-left: 2px #f0f0f0 solid;
+    padding-left: 5px;
 }
 
 .breadcrumbs-item{
@@ -98,6 +115,7 @@ form:not(#exclude){
 .dish-img {
     max-height: 25%;
     max-width: 25%;
+    border: 1px #42bbbb solid;
 }
 
 .allergen-icon{
@@ -132,9 +150,17 @@ footer {
     padding: 10px 0;
 }
 
-@media screen and (max-width: 430px){
+@media screen and (max-width: 550px){
     .nav-list{
         display: block;
+        padding: 10px 0;
+    }
+    .nav-item+.nav-item{
+            border-left: none;
+    }
+    .nav-item{
+        border-bottom: 2px #f0f0f0 solid;
+        padding: 0 0 5px 0;
     }
     .breadcrumbs-item{
         padding: 20px 40px;
@@ -145,6 +171,10 @@ footer {
     *{
         padding: 0 !important; 
         margin: 0 !important;
+    }
+    .nav-list{
+        border: none;
+        border-radius: 0;
     }
 }
 
@@ -158,9 +188,13 @@ footer {
         font-size: 1em !important;
         transform: rotate(0) !important;
     }
-    img:not(.allergen-icon){
-        max-height: 50% !important;
-        max-width: 50% !important;
+    a:has(img:not(.allergen-icon)){
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    img:not(.allergen-icon) {
+        max-height: 100% !important;
+        max-width: 100% !important;
     }
     .sticky{
         position: sticky !important;

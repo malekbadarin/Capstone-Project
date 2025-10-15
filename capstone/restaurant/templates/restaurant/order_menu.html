@@ -21,7 +21,7 @@
         <form class='container-flex form' action="{% url 'order-review' %}" method='post'>
             {% csrf_token %}
             <div class='container-flex sticky'>
-                <div>
+                <div id='total-container'>
                     <h3>Total:</h3>
                     <h3 id='total-heading'></h3><span> JOD</span>
                 </div>
@@ -41,7 +41,7 @@
                 {% for item in menu %}
                     {% if item.is_available %}
                         <div class='container-flex card' data-price="{{ item.unit_price }}" id="dish-{{ item.id }}">
-                            <img class='dish-img' src="{% static 'restaurant/images/dishes/dish-placeholder.png'  %}" alt="{{ item.desc }}">
+                            <img class='dish-img' src="{% static 'restaurant/images/dishes/'|add:item.html_name|add:'.png' %}" alt="{{ item.desc }}" title="{{ item.name }}">
                             <div class='container'>
                                 <h3 class='dish-name'>{{ item.name }}</h3>
                                 <p class='dish-desc'>{{ item.desc }}</p>
@@ -55,7 +55,7 @@
                             </div>
                             <div class="container-flex add-remove-quantity">
                                 <p class='button sub-button'>-</p>
-                                <input class='button qty-input' type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min="0" value="{{ item.quantity|default:"0" }}">
+                                <input class='qty-input' type="number" id="{{ item.html_name }}" name="{{ item.html_name }}" min="0" value="{{ item.quantity|default:"0" }}">
                                 <p class='button add-button'>+</p>
                             </div>
                         </div>

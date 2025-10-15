@@ -6,15 +6,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Restaurant{% endblock %}</title>
         <link rel="icon" href="{% static 'restaurant/images/logo.png' %}">
-        <link rel="stylesheet" href="{% static 'restaurant/css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'restaurant/css/base.css' %}" type="text/css">
         {% block stylesheet %}
         {% endblock %}
     </head>
     <body>
         <header class='container-flex'>
-            <a href="{% url 'home' %}"><img class='image' id='logo' src="{% static 'restaurant/images/logo.png' %}" alt="logo"></a>
+            <a id='logo' href="{% url 'home' %}"><img class='image' src="{% static 'restaurant/images/logo.png' %}" alt="logo"></a>
             {% block main-header %}
             {% endblock %}
+            {% block body %}
             <nav class='container-flex'>
                 {% if user.is_authenticated %}
                     <ul class='container-flex nav-list'>
@@ -28,7 +29,7 @@
                         <li class='nav-item'>
                             <form id='exclude' method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
-                                    <button class='button' type="submit">Log out</button>
+                                    <button type="submit">Log out</button>
                             </form>
                         </li>
                     </ul>
@@ -36,15 +37,16 @@
                     <ul class='container-flex nav-list'>
                         {% for path in guest_paths %}
                             {% if path != request.resolver_match.view_name %}
-                                <li class='nav-item'><a href="{% url path %}">{{path}}</a></li>
+                                <li class='nav-item'><a href="{% url path %}">{{path|capfirst}}</a></li>
                             {% else %}
-                                <li class='nav-item'>{{path}}</li>
+                                <li class='nav-item'>{{path|capfirst}}</li>
                             {% endif %}
                         {% endfor %}
                     </ul>
                 {% endif %}
             </nav>                
         </header>
+        {% endblock %}
         {% block content %}
         {% endblock %}
         <footer>

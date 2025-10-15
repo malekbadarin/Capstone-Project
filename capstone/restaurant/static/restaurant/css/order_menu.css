@@ -27,7 +27,7 @@ form{
 
 .review-button{
     height: 100%;
-    width: 100%;
+    width: 80%;
     padding: 0 25%;
 }
 
@@ -48,8 +48,8 @@ form{
     font-size: 1.05em;
 }
 
-#total-heading{
-    padding-left: 15px;
+.total-container{
+    width: 10%;
 }
 
 @media screen and (max-width: 768px){

@@ -46,10 +46,10 @@ hr{
 .container-buttons > *{
     padding: 5px;
     margin: 5px;
-    font-size: 1.5em;
 }
 .container-buttons *{
     background-color: #42bbbb;
+    font-size: 1em;
 }
 
 @media screen and (max-width: 430px) {

@@ -18,8 +18,8 @@
             <form class='container review' action="{% url 'order-confirmation' order.id %}" method='post'>
                 {% csrf_token %}
                 {% for item in order.orderitem_set.all %}
-                    <div class='container-flex review-card'>
-                        <img class='dish-img' src="{% static 'restaurant/images/dishes/dish-placeholder.png' %}" alt="{{ item.menu_item.name }}">
+                    <div class='container-flex review-card card' data-price="{{ item.menu_item.unit_price }}">
+                        <img class='dish-img' src="{% static 'restaurant/images/dishes/'|add:item.html_name|add:'.png' %}" alt="{{ item.menu_item.name }}">
                             <div class='container review-card-text'>
                                 <h3 class='review-card-name'>{{ item.menu_item.name }}</h3>
                                 <p class='review-card-desc'>{{ item.menu_item.desc }}</p>
@@ -43,7 +43,7 @@
                 <div class='container total'>
                     <hr>
                     <h3>Total:</h3>
-                    <h3>{{ order.total }}</h3>
+                    <h3 id='total-heading'></h3>
                 </div>
                 <div class='container review-delivery-options'>
                     <p>Your order type: <a href={% url 'order-menu' %}>{{ order.get_order_type_display }}</a></p>
@@ -71,7 +71,7 @@
                     {% endif %}
                 </div>
                 <div class='container-flex container-buttons'>
-                    <p class='button'><a href={% url 'order-menu' %}>Back to menu</a></p>
+                    <p class='button'><a class='button' href={% url 'order-menu' %}>Back to menu</a></p>
                     <button type="submit" class='button submit'>Place order</button>
                 </div>
             </form>

@@ -6,14 +6,14 @@
 {% block stylesheet %}<link rel="stylesheet" href="{% static 'restaurant/css/order_confirmation.css' %}">{% endblock %}
 
 {% block content %}
-    <main>
-        <div class='container heading'>
-            <h1>Thank you!</h1>
-            <h3>Your order has been confirmed.</h3>
-        </div>
+    <main class='container-flex'>
+        <img class='order-type-img' src="{% static 'restaurant/images/delivery_info/'|add:order.order_type|add:'.png' %}" alt="{{order.get_order_type_display}}" title="{{order.get_order_type_display}}">
         <div class='container order-info'>
+            <div class='container heading'>
+                <h1>Thank you!</h1>
+                <h3>Your order has been placed.</h3>
+            </div>
             <div class='container delivery-info'>
-                <img src="{% static 'restaurant/images/delivery_info/'|add:order.order_type|add:'.png' %}" alt="{{order.get_order_type_display}}">
                 {% if order.order_type == 'I' %}
                     <p>Your reservation for {{ order.party }} person(s), at {{ order.reservation_time }}. You will be seated at Table Number: {{order.table_no}}.</p>
                 {% elif order.order_type == 'P' %}
@@ -22,13 +22,13 @@
                     <p>Our delivery team will contact you once the order is on its way!</p>
                 {% endif %}
             </div>
-        </div>
-        {% if order.order_type == 'D' %}
+            {% if order.order_type == 'D' %}
             <div class='container customer-info'>
                 <h4>Delivery location:</h4>
                 <p>{{ order.delivery_location }}</p>
             </div>        
         {% endif %}
+        </div>
         <div class='container order-summary'>
             <h4>Order Summary</h4>
             <table class='container order-summary-list'>
@@ -43,30 +43,30 @@
                     <td class='summary-item-price'>{{ order.total }}</td>
                 </tr>
             </table>
+            <p>Order confirmation # <br>{{ order.confirmation_number }}</p>
         </div>
-        <div class='container'>
-            <p>Order confirmation # {{ order.confirmation_number }}</p>
-        </div>
-        {% comment %} <p>Order no: {{ order.confirmation_number }} placed successfully</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Quantity</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in order.orderitem_set.all %}
+        {% comment %} Older more basic version
+            <p>Order no: {{ order.confirmation_number }} placed successfully</p>
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ item.menu_item.name }}</td>
-                        <td>{{ item.quantity }}</td>
+                        <th>Item</th>
+                        <th>Quantity</th>
                     </tr>
-                {% endfor %}
-                <tr>
-                    <td>Total</td>
-                    <td>{{ order.total }}
-                </tr>
-            </tbody>
-        </table> {% endcomment %}
+                </thead>
+                <tbody>
+                    {% for item in order.orderitem_set.all %}
+                        <tr>
+                            <td>{{ item.menu_item.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>Total</td>
+                        <td>{{ order.total }}
+                    </tr>
+                </tbody>
+            </table>
+        {% endcomment %}
     </main>
 {% endblock %}

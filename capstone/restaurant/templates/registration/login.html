@@ -3,15 +3,18 @@
 
 {% block title %}Sign In{% endblock %}
 
-{% block main-header %}
-    <h1>Sign In</h1>
+{% block stylesheet %}
+<link href="{% static "restaurant/css/login.css" %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="hidden" name="next" value="{% url 'order-menu' %}">
-        <button type="submit">Login</button>
-    </form>
+    <main>
+        <h1>Sign in to place your order</h1>
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="hidden" name="next" value="{% url 'order-menu' %}">
+            <button class='button' type="submit">Login</button>
+        </form>
+    </main>
 {% endblock %}

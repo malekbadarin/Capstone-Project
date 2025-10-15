@@ -1,0 +1,14 @@
+main.container-flex{
+    justify-content: center;
+}
+td {
+  border: 1px #42bbbb solid;
+}
+.order-summary{
+    border-radius: 5px;
+    border: 2px #42bbbb solid;
+}
+.order-type-img{
+    flex-shrink:2;
+    max-width: 25%;
+}

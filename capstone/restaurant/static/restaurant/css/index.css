@@ -44,16 +44,12 @@ main > a{
     margin: 0 2.5%;
 }
 
-#buttons-section a{
-    width: 45%;
-}
-
 .button-img{
     width: 45%;
     height: 75%;
 }
 
-.index-img, .button-img{
+.index-img{
     background-color: #42bbbb;
 }
 

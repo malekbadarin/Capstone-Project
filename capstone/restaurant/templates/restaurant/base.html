@@ -47,8 +47,10 @@
             </nav>
         </header>
         <hr>
-        <h3 class='text-center' id='user-greeting'>You are now logged in as {{user.username|capfirst|default:'Guest'}}!</h3>
+        {% block welcome %}
+        <h3 class='text-center' id='user-greeting'>Welcome, {{user.username|capfirst|default:'Guest'}}!</h3>
         <hr>
+        {% endblock  %}
         {% endblock %}
         {% block content %}
         {% endblock %}

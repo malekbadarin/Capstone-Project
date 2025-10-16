@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Menu, Order
+from .models import Menu, Order, User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
@@ -129,12 +129,17 @@ def orderreview(request, order_id):
 @login_required
 def order_review(request):
     if request.method == 'POST':
+        user = request.user
+        """ addresses = User.useraddress_set.filter(user = user)
+        try:
+            default_address = addresses.first()
+        except:
+            default_address = '' """
         response = request.POST
-        valid_order = False
         menu_item_names = [item.name for item in Menu.objects.all()]
         order = Order.objects.filter(user = request.user, status = 'O').first() #tries to find an open order for the user if no open order is found, creates a new order
         if not order:
-            order = Order(user = request.user)
+            order = Order(user = user)
             order.save()
         order_item_names = [item.menu_item.name for item in order.orderitem_set.all()]
         for key, value in response.items():

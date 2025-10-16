@@ -193,14 +193,13 @@ footer {
     }
 }
 
-@media screen and (max-width: 344px){
-    *{
-        padding: 0 !important; 
-        margin: 0 !important;
+@media screen and (max-width: 500px){
+    .review-button{
+        width: 30% !important;
+        padding: 0 !important;
     }
-    .nav-list{
-        border: none;
-        border-radius: 0;
+    .breadcrumbs-item{
+        padding: 20px 10px !important;
     }
 }
 
@@ -213,6 +212,8 @@ footer {
         max-width: 100% !important;
         font-size: 1em !important;
         transform: rotate(0) !important;
+        padding: 0 !important; 
+        margin: 0 !important;
     }
     a:has(img:not(.allergen-icon)){
         margin-left: auto !important;
@@ -224,7 +225,6 @@ footer {
     }
     .sticky{
         position: sticky !important;
-        text-align: center;
         z-index: 2;
     }
 }

@@ -19,18 +19,18 @@
             </div>
         </section>
         <section class='container-flex' id='buttons-section'>
-            <a class='container-flex button-img button' href="{% url 'order-menu' %}">
-                
+            <a href="{% url 'order-menu' %}">
+                <div class='container-flex button-img button'>
                     <img class='index-img' id='view-menu-img' src="{% static 'restaurant/images/view_menu_button.png' %}" alt="View Menu">
                     <h3 class="transparent-img-label">VIEW MENU</h3>
-                
+                </div>
             </a>
             {% if not user.is_authenticated %}
-                <a class='container-flex button-img button' href="{% url 'login' %}">
-                    
+                <a href="{% url 'login' %}">
+                    <div class='container-flex button-img button'>
                             <img class='index-img' id='login-img' src="{% static 'restaurant/images/start_order_button.png' %}" alt="Start Order">
                             <h3 class="transparent-img-label">START ORDER</h3>
-                    
+                    </div>
                 </a>
             {% endif %}
         </section>

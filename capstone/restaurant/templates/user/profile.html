@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block content %}
+    {% block welcome %}{% endblock  %}
     <main>
         <h1>Welcome {{user.username|capfirst}}!</h1>
         <div class='felx-container content'>
@@ -32,6 +33,7 @@
                         <li>{{item.name}} x {{item.quantity}} ({{item.subtotal}})</li>
                 {% endfor %}
                     </ul>
+                    <img class='order-type-icon' src="{% static 'restaurant/images/delivery_info/'|add:order.order_type|add:'.png' %}" alt="{{order.get_order_type_display}}" title="{{order.get_order_type_display}}">
                     <p>Total: {{order.total}}</p>
                     <div class='container-flex buttons-container'>
                         <p><a class='button' href="#">Edit order</a></p>

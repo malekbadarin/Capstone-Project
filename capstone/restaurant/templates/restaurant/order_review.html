@@ -64,7 +64,10 @@
                         <label for="pickup-time">Pick-up time:</label>
                         <input type="time" id="pickup-time" name="pickup-time"><span id='pickup-warning' style='color: red;'></span>
                     {% else %}
-                        <input type="" class='input-choice' id="address" name="address" default="{{ user.address }}">
+                        <label for="address">Delivery address:</label>
+                        <select class='input-select' id="address" name="address" value="{{ default_address }}">
+                            <option value=></option>
+                        </select>
                     {% endif %}
                 </div>
                 <div class='container-flex container-buttons'>

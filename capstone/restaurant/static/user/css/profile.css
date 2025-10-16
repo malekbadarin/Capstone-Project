@@ -4,9 +4,23 @@
 }
 
 .order-card{
-    width: 20%;
-    margin-left: 5%;
+    width: 15%;
+    margin-left: 2%;
     margin-top: 1%;
     border: 2px #42bbbb solid;
     border-radius: 10px;
+    padding: 10px;
+}
+
+.order-type-icon{
+    max-width: 17.5%;
+    max-height: 17.5%;
+}
+
+.buttons-container{
+    padding-top: 5px;
+}
+
+.buttons-container .button{
+    padding: 5px;
 }

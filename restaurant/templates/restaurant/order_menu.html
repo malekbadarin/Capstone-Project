@@ -37,7 +37,7 @@
                 {% for item in menu %}
                     {% if item.is_available %}
                         <div class='container-flex card' data-price="{{ item.unit_price }}" id="dish-{{ item.id }}">
-                            <img class='dish-img' src="{% static 'restaurant/images/dishes/'|add:item.name|add:'.png' %}" alt="{{ item.desc }}" title="{{ item.name }}">
+                            <img class='dish-img' src="{% static 'restaurant/images/dishes/'|add:item.html_name|add:'.png' %}" alt="{{ item.desc }}" title="{{ item.name }}">
                             <div class='container card-text'>
                                 <h3 class='dish-name'>{{ item.name }}</h3>
                                 <p class='dish-desc'>{{ item.desc }}</p>

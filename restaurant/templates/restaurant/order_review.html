@@ -16,7 +16,7 @@
                 {% csrf_token %}
                 {% for item in order.orderitem_set.all %}
                     <div class='container-flex review-card card' data-price="{{ item.menu_item.unit_price }}">
-                        <img class='dish-img' src="{% static 'restaurant/images/dishes/'|add:item.name|add:'.png' %}" alt="{{ item.menu_item.name }}">
+                        <img class='dish-img' src="{% static 'restaurant/images/dishes/'|add:item.html_name|add:'.png' %}" alt="{{ item.menu_item.name }}">
                             <div class='container review-card-text'>
                                 <h3 class='review-card-name'>{{ item.menu_item.name }}</h3>
                                 <p class='review-card-desc'>{{ item.menu_item.desc }}</p>

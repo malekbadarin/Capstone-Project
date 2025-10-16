@@ -3,9 +3,10 @@
 
 {% block title %}Page not found{% endblock %}
 
+{% block welcome %}{% endblock  %}
 {% block content %}
 <main>
-    <img src="{% static 'restaurant/images/404.png' %}">
+    <img class="img-404" src="{% static 'restaurant/images/404.png' %}">
     <p>Sorry, the page you are trying to reach does not exit.</p>
     <button action='back'>Go back</button>
 </main>

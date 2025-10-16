@@ -71,8 +71,10 @@ def menu_helper_function(request):
     for item in menu:
         try:
             item.quantity = item.orderitem_set.filter(order_id = order.id).first().quantity
+            item.id=str(item.id)
         except:
             item.quantity = 0
+    print(f'------------------------------------\nmenu: {Menu}\nmenu.objects.all(): {Menu.objects.all()}\nmenu.objects.all().order_by(id): {Menu.objects.all().order_by('id')}\nmenu.objects.all().order_by(id)[0] {Menu.objects.all().order_by('id')[0]}\nmenu.objects.all().order_by(id)[0].name: {Menu.objects.all().order_by('id')[0].id}\n------------------------------------')
     return menu, order_type
 
 @login_required

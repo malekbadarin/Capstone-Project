@@ -31,7 +31,7 @@ erDiagram
         int party
         datetime reservation_time
         int table_no
-        address
+        varchar(50) address
     }
     MenuItem {
         int menu_item_id PK

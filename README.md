@@ -16,32 +16,46 @@ title: Restaurant app ERD
 ---
 erDiagram
     User {
-       int user_id PK
-       varchar(50) username
-       varchar(1) user_type
-       varchar(50) password
-       varchar(50) email
-       int phone
+        int user_id PK
+        varchar(50) username
+        varchar(1) user_type
+        varchar(50) password
+        varchar(50) email
+        int phone
     }
     Order {
-       int order_id PK
-       int user_id FK
-       date date_placed
-       varchar(1) status
+        int order_id PK
+        int user_id FK
+        varchar(1) status
+        varchar(1) order_type
+        int party
+        datetime reservation_time
+        int table_no
+        varchar(50) address
     }
     MenuItem {
-       int menu_item_id PK
-       varchar(50) name
-       varchar(50) ingredients
-       boolean is_available
-       float price
+        int menu_item_id PK
+        varchar(50) name
+        varchar(50) ingredients
+        boolean is_available
+        float unit_price
+        int portions
+        varchar(2) allergen
     }
     OrderItem {
-       int order_item_id PK
-       int menu_item_id FK
-       int order_id FK
-       int quantity
+        int order_item_id PK
+        int menu_item_id FK
+        int order_id FK
+        int quantity
     }
+    UserAddress {
+        int user_id FK
+        varchar(25) building
+        varchar(25) street
+        varchar(25) region
+        varchar(25) city
+    }
+    User ||--|{ UserAddress : has
     User ||--o{ Order : makes
     Order ||--|{ OrderItem : contains
     OrderItem ||--|| MenuItem : contains
@@ -57,11 +71,12 @@ erDiagram
 
 ### Registered Customer
 - As a registered user, I want to **log in** so my basic details auto-fill at checkout.
-- As a registered user, I want my **profile (name/phone)** to be saved so checkout is faster next time.
+- As a registered user, I want my **profile (name/address)** to be saved so checkout is faster next time.
 - As a registered user, I want to **add/remove items from my order and adjust quantities**.
-- - As a registered user, I want to **submit my order and get confirmation that my order was recieved**.
+- As a registered user, I want to **submit my order and get confirmation that my order was recieved**.
+- As a registered user, I want to **view and edit my submitted orders that are still pending** (under development).
 
-### Staff User
+### Staff User (under development)
 - As a staff member, I want to **see a list of incoming orders** so I can prepare them efficiently.
 - As a staff member, I want to **view an order’s details** so I know what to prepare.
 - As a staff member, I want to **update order status** (received → preparing → ready → completed).
@@ -75,15 +90,15 @@ erDiagram
 ## 4) MVP Scope & Non-Goals
 
 **Included**
-- Menu browsing (categories & items)
-- Logged-in order submission (simple form: contact name, phone, order type)
+- Menu browsing
+- Logged-in order submission
 - Order creation (Order + OrderItems) with price snapshots
-- Staff dashboard (list, filter by status, update status)
+- Staff dashboard (under development)
 - Basic responsive styling
 - Django Admin for menu management
+- Order history pages (under development)
 
 **Excluded (Stretch)**
-- Order history pages
 - Menu item customization/options
 - Inventory/stock management & dynamic availability
 - Nutrition labels
@@ -93,22 +108,24 @@ erDiagram
 
 ## 5) Routes (Proposed)
 - `/` — Home (CTA to Menu)
-- `/menu/` — Categories & items
-- `/cart/` — View/update cart (before submission)
-- `/submit/` — Submit form (logged-in)
-- `/orders/<code>/confirmation/` — Order confirmation page
-- `/staff/orders/` — Staff order list (auth required)
-- `/staff/orders/<id>/` — Staff order detail + status update (auth required)
+- `/about/` — About page
+- `/login/` — Login page
+- `/signup/` — Signup page
+- `/profile/` — User profile
+- `/order/menu/` — Categories & items
+- `/order/review/` — View/update cart (before submission)
+- `/orders/confirmation/<int:order_id>` — Order confirmation page
+- `/staff/` — Staff page (under development)
+
 
 ---
 
 ## 6) Acceptance Criteria (MVP)
 - **Menu:** Only `is_active` items are visible.
-- **Cart:** Add/remove and quantity updates work; subtotals recalc correctly.
-- **Submit:** Creates `Order` + `OrderItem` records; generates short `order_code`.
-- **Staff:** Orders appear on a dynamic view; status transitions are persisted and visible on order detail.
-- **Auth/Permissions:** Staff routes require authenticated staff user; customers can order as guest or logged-in user.
-- **UX:** Mobile-friendly layout; clear error/empty states; success flash messages.
+- **Review:** Add/remove and quantity updates work; subtotals recalc correctly.
+- **Confirm:** Creates `Order` + `OrderItem` records; generates short `confirmation_number`.
+- **Auth/Permissions:** Customers can order only as logged-in user. Users can only access their own order history.
+- **UX:** Mobile-friendly layout; success messages.
 
 ---
 
@@ -120,7 +137,7 @@ erDiagram
 **Day 4:** Staff dashboard (list/detail), status transitions, basic auth/permissions.  
 **Day 5:** Styling & UX polish; tax/total computation; validation & messages.  
 **Day 6:** Tests (models/services), a couple of view tests; fixtures; README updates.  
-**Day 7:** Buffer, QA pass, screenshots/GIF for demo.
+**Day 7:** Buffer, QA pass.
 
 ---
 

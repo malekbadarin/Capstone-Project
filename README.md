@@ -48,7 +48,7 @@ erDiagram
         int order_id FK
         int quantity
     }
-    UserAddress (under development) {
+    UserAddress(under_development) {
         int user_id FK
         varchar(25) building
         varchar(25) street

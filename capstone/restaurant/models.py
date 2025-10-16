@@ -21,6 +21,7 @@ class Menu(models.Model):
     )
     portions = models.IntegerField(default = 1)
     allergen = models.CharField(
+        max_length=2,
         default = 'NA',
         choices = (
             ('PE', 'Peanuts'),
@@ -76,6 +77,7 @@ class Order(models.Model):
         on_delete = models.CASCADE,
         )
     address = models.CharField(
+        max_length= 50,
         blank = True,
         )
 

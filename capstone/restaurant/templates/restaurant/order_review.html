@@ -65,9 +65,10 @@
                         <input type="time" id="pickup-time" name="pickup-time"><span id='pickup-warning' style='color: red;'></span>
                     {% else %}
                         <label for="address">Delivery address:</label>
-                        <select class='input-select' id="address" name="address" value="{{ default_address }}">
+                        <type type="text" class='address' id="address" name="address" value="">
+                        {% comment %} <select class='input-select' id="address" name="address" value="{{ default_address }}">
                             <option value=></option>
-                        </select>
+                        </select> {% endcomment %}
                     {% endif %}
                 </div>
                 <div class='container-flex container-buttons'>
